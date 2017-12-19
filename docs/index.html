@@ -10,7 +10,7 @@
 <meta name="description" content="An MVC Calendar Todo App">
 <meta name="keywords" content="">
 <title>Calendar Todo App</title>
-<link href="https://fonts.googleapis.com/css?family=Hind:300,400,500,600" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,500,600" rel="stylesheet">
 <!-- <link rel="stylesheet" href="css/main.css"> -->
 <link rel="stylesheet" href="css/main.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -33,7 +33,7 @@
             </button>
         </div>
         <!-- View -->
-        <div class="container">
+        <div class="container" v-cloak>
             <div :class="{calendar: isState('split'), 'calendar-full': isState('full')}">
                 <div class="calendar-head">
                     {{ monthNames[activeMonth] }} {{ activeYear }}
@@ -51,31 +51,34 @@
                     </button>
                 </div>
 
-                <table class="calendar-table" v-cloak>
-                    <thead>
-                        <tr class="calendar-weekdays">
-                            <td v-for="weekday in weekdayNames">{{ weekday }}</td>
-                        </tr>
-                    </thead>
+                <div class="calendar-table-wrap">
+                    <table class="calendar-table">
+                        <thead>
+                            <tr class="calendar-weekdays">
+                                <td v-for="weekday in weekdayNames">{{ weekday }}</td>
+                            </tr>
+                        </thead>
 
-                    <tbody>
-                        <tr v-for="week in getWeeks">
-                            <td v-for="day in week" :class="{today: isToday(day.day), selected: isSelected(day.day)}" @click="selectDay(day.day)">
-                                {{ day.day }}
-                                <template v-if="day.day">
-                                    <ul :class="{'calendar-dots': isState('split'), 'calendar-list': isState('full')}" v-if="day.todos.length > 0 && day.day">
-                                        <li v-for="task in day.todos">
-                                            <template v-if="isState('full')">
-                                                {{ task.text }}
-                                            </template>
-                                            
-                                        </li>
-                                    </ul>
-                                </template>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <tbody>
+                            <tr v-for="week in getWeeks">
+                                <td v-for="day in week" :class="{today: isToday(day.day), selected: isSelected(day.day)}" @click="selectDay(day.day)">
+                                    {{ day.day }}
+                                    <template v-if="day.day">
+                                        <ul :class="{'calendar-dots': isState('split'), 'calendar-list': isState('full')}" v-if="day.todos.length > 0 && day.day">
+                                            <li v-for="task in day.todos">
+                                                <template v-if="isState('full')">
+                                                    {{ task.text }}
+                                                </template>
+                                                
+                                            </li>
+                                        </ul>
+                                    </template>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
             </div>
 
             <div :class="{todo: isState('split'), 'full-todo': isState('full')}" v-if="taskOpen || isState('split')">
@@ -101,7 +104,7 @@
 </div>
 
 
-<script src="js/vue.min.js"></script>
+<script src="js/vue.js"></script>
 <script src="js/main.js"></script>
 </body>
 

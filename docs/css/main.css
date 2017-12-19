@@ -7,23 +7,31 @@
 
 .calendar-full {
   width: 100%;
-  height: 80vh;
-  overflow: auto; }
+  height: 100%;
+  background: #ddd; }
   .calendar-full table {
-    width: 100% !important; }
-  .calendar-full thead td {
-    height: 2rem !important; }
+    width: 100% !important;
+    min-width: 28rem; }
   .calendar-full tbody td {
     text-align: left;
     vertical-align: top;
-    height: 6rem !important;
+    height: 7rem !important;
     width: calc(100% / 7) !important; }
+    @media screen and (min-width: 1367px) {
+      .calendar-full tbody td {
+        height: 8rem !important; } }
+
+.calendar-table-wrap {
+  width: 100%;
+  height: 100%;
+  overflow: auto; }
 
 .calendar-head {
   background: linear-gradient(to bottom right, #25c, #28f);
   color: #fff;
   position: relative;
   height: 3rem;
+  font-weight: 300;
   line-height: 3rem; }
 
 .arrow-button {
@@ -31,7 +39,7 @@
   border: none;
   outline: none;
   font-size: 1em;
-  font-family: "Hind", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
   background: transparent;
   position: absolute;
   top: .5rem;
@@ -61,8 +69,13 @@
   background: #fff; }
   .calendar-table thead {
     border-bottom: 2px solid #ddd; }
+    .calendar-table thead td {
+      height: 1.5rem !important;
+      padding: 0 !important; }
+      .calendar-table thead td:first-child, .calendar-table thead td:last-child {
+        font-weight: 600; }
   .calendar-table td {
-    padding: .5em;
+    padding: 2px 4px;
     cursor: pointer;
     width: 3rem;
     height: 3rem;
@@ -104,17 +117,17 @@
   bottom: 4px;
   left: 4px;
   right: 4px;
-  height: calc(100% - 2rem);
+  height: calc(6rem - 8px);
   overflow: hidden; }
-  .calendar-list:after {
+  .calendar-list::after {
     content: '';
     display: block;
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 2rem;
-    background: linear-gradient(to top, white, transparent); }
+    height: 1rem;
+    background: linear-gradient(to top, white, rgba(255, 255, 255, 0)); }
   .calendar-list li {
     display: block;
     padding: 2px;
@@ -123,7 +136,7 @@
     font-size: .6rem;
     margin: 0;
     color: #fff;
-    font-weight: 500;
+    font-weight: 600;
     background: #28f;
     margin-top: 2px; }
 
@@ -142,7 +155,7 @@
 .todo {
   background: white;
   border: none;
-  padding: 1rem;
+  padding: 1rem 2rem;
   width: 21rem;
   margin: 0;
   position: relative;
@@ -188,25 +201,17 @@
 html {
   font-size: 18px;
   font-weight: 400;
-  font-family: "Hind", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
   color: #333; }
 
 body {
-  background: linear-gradient(to bottom, #334, #446);
+  background-image: linear-gradient(to bottom, #334, #446);
   background-size: cover;
   background-attachment: fixed;
-  height: 100vh;
   margin: 0; }
 
 [v-cloak] {
   display: none !important; }
-
-h1 {
-  font-size: 1rem;
-  line-height: 3rem;
-  font-weight: 500;
-  margin: 0;
-  display: inline; }
 
 .wrap {
   margin: 0 auto;
@@ -217,22 +222,33 @@ h1 {
   box-shadow: 0 0.8rem 2rem rgba(0, 0, 0, 0.5);
   border-radius: 4px;
   overflow: hidden;
-  margin: 1.2rem 2rem 2.8rem; }
+  margin: 1rem;
+  height: calc(100vh - 2rem);
+  min-height: 400px; }
   @media screen and (max-width: 768px) {
     .app {
-      margin: 0; } }
+      margin: 0;
+      height: 100vh; } }
 
 .toolbar {
   background: #eee;
   height: 3rem;
-  position: relative; }
+  position: relative;
+  font-size: .9rem; }
+
+h1 {
+  font-size: .9rem;
+  line-height: 3rem;
+  font-weight: 600;
+  margin: 0;
+  display: inline; }
 
 .full-button {
   display: inline-block;
   border: none;
   outline: none;
   font-size: 1em;
-  font-family: "Hind", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
   background: transparent;
   position: absolute;
   right: .5rem;
@@ -251,7 +267,8 @@ h1 {
 .container {
   display: flex;
   background: #fff;
-  overflow: hidden; }
+  overflow: hidden;
+  height: calc(100% - 3rem); }
 
 td.selected {
   box-shadow: inset 0 0 0 2px #28f; }

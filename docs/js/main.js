@@ -162,6 +162,14 @@ var todo = new Vue({
         }
     },
 
+    created: function () {
+        this.activeMonth = this.currentMonth;
+        if (localStorage.getItem("savedState")) {
+            this.state = localStorage.getItem("savedState");
+            console.log("STATE LOADED");
+        }
+    },
+
     watch: {
         selected: {
             handler: function () {
@@ -172,6 +180,13 @@ var todo = new Vue({
                         _parseDate(a.created).month === self.selected.month &&
                         _parseDate(a.created).year === self.selected.year;
                 })
+            },
+            deep: true
+        },
+        state: {
+            handler: function () {
+                localStorage.setItem('savedState', this.state);
+                console.log("STATE SAVED");
             },
             deep: true
         }
@@ -224,8 +239,6 @@ var todo = new Vue({
                             });
                             var elem = weeks[i][weeks[i].length - 1];
                             elem.todos = this.getTodos(elem);
-
-                            console.log(elem);
                             currentDay++;
                         }
                         else {
@@ -238,10 +251,6 @@ var todo = new Vue({
 
             return weeks;
         }
-    },
-
-    created: function () {
-        this.activeMonth = this.currentMonth;
     },
 
     methods: {
