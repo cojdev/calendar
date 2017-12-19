@@ -31,6 +31,7 @@
   border: none;
   outline: none;
   font-size: 1em;
+  font-family: "Hind", "Segoe UI", Helvetica, sans-serif;
   background: transparent;
   position: absolute;
   top: .5rem;
@@ -69,7 +70,7 @@
     .calendar-table td:not(:last-child) {
       border-right: 1px solid #ddd; }
   .calendar-table tbody td {
-    transition: 150ms ease; }
+    transition: background 150ms ease; }
     .calendar-table tbody td:hover {
       background: #eee; }
   .calendar-table tbody tr:not(:last-child) {
@@ -119,7 +120,7 @@
     padding: 2px;
     white-space: nowrap;
     overflow: hidden;
-    font-size: .5rem;
+    font-size: .6rem;
     margin: 0;
     color: #fff;
     font-weight: 500;
@@ -201,9 +202,9 @@ body {
   display: none !important; }
 
 h1 {
-  font-size: 1.5rem;
+  font-size: 1rem;
   line-height: 3rem;
-  font-weight: 300;
+  font-weight: 500;
   margin: 0;
   display: inline; }
 
@@ -223,7 +224,29 @@ h1 {
 
 .toolbar {
   background: #eee;
-  height: 3rem; }
+  height: 3rem;
+  position: relative; }
+
+.full-button {
+  display: inline-block;
+  border: none;
+  outline: none;
+  font-size: 1em;
+  font-family: "Hind", "Segoe UI", Helvetica, sans-serif;
+  background: transparent;
+  position: absolute;
+  right: .5rem;
+  top: .5rem;
+  color: #888;
+  padding: 0 .5rem;
+  height: 2rem;
+  border-radius: 4px;
+  transition: 150ms ease; }
+  .full-button:hover {
+    background: rgba(0, 0, 0, 0.1); }
+  .full-button:active {
+    background: rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
 
 .container {
   display: flex;

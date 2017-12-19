@@ -154,6 +154,7 @@ var todo = new Vue({
         currentList: [],
         dayList: [1,2,3],
         state: "split",
+        taskOpen: false,
         selected: {
             day: date.getDate(),
             month: date.getMonth(),

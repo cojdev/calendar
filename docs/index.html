@@ -23,7 +23,14 @@
         <!-- Toolbar -->
         <div class="toolbar">
             <h1>Calendar Todo App</h1>
-            <button @click="toggleState">Toggle</button>
+            <button class="full-button" @click="toggleState">
+                <template v-if="isState('split')">
+                    Full View <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                </template>
+                <template v-else>
+                    Split View <i class="fa fa-columns" aria-hidden="true"></i>
+                </template>
+            </button>
         </div>
         <!-- View -->
         <div class="container">
@@ -71,7 +78,7 @@
                 </table>
             </div>
 
-            <div :class="{todo: isState('split'), 'full-todo': isState('full')}">
+            <div :class="{todo: isState('split'), 'full-todo': isState('full')}" v-if="taskOpen || isState('split')">
                 <div class="todo-date">{{ formatDate(selected) }}</div>
                 <label for=""></label>
                 <input type="text" placeholder="Add a new task">
