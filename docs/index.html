@@ -17,23 +17,24 @@
 </head>
 
 <body>
-<div class="wrap">
-    <!-- Vue App -->
-    <div id="app" class="app">
-        <!-- Toolbar -->
-        <div class="toolbar">
-            <h1>Calendar Todo App</h1>
-            <button class="full-button" @click="toggleState">
-                <template v-if="isState('split')">
-                    Full View <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-                </template>
-                <template v-else>
-                    Split View <i class="fa fa-columns" aria-hidden="true"></i>
-                </template>
-            </button>
-        </div>
-        <!-- View -->
-        <div class="container" v-cloak>
+<!-- Vue App -->
+<div id="app" class="app">
+    <!-- Toolbar -->
+    <div class="toolbar">
+        <h1>Calendar Todo App</h1>
+        <button class="full-button" @click="toggleState">
+            <template v-if="isState('split')">
+                Full View <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+            </template>
+            <template v-else>
+                Split View <i class="fa fa-columns" aria-hidden="true"></i>
+            </template>
+        </button>
+    </div>
+    <!-- View -->
+    <div class="window">
+        <button class="task-button" v-if="isState('full')"><i class="fa fa-pencil" aria-hidden="true"></i></button>
+        <div class="row" v-cloak>
             <div :class="{calendar: isState('split'), 'calendar-full': isState('full')}">
                 <div class="calendar-head">
                     {{ monthNames[activeMonth] }} {{ activeYear }}
@@ -65,7 +66,7 @@
                                     {{ day.day }}
                                     <template v-if="day.day">
                                         <ul :class="{'calendar-dots': isState('split'), 'calendar-list': isState('full')}" v-if="day.todos.length > 0 && day.day">
-                                            <li v-for="task in day.todos">
+                                            <li v-for="task in day.todos" :class="{'task-checked': task.checked === true}">
                                                 <template v-if="isState('full')">
                                                     {{ task.text }}
                                                 </template>
@@ -84,11 +85,11 @@
             <div :class="{todo: isState('split'), 'full-todo': isState('full')}" v-if="taskOpen || isState('split')">
                 <div class="todo-date">{{ formatDate(selected) }}</div>
                 <label for=""></label>
-                <input type="text" placeholder="Add a new task">
+                <input type="text" placeholder="Add a new task" v-if="!isPast(selected)">
                 <template v-if="currentList.length !== 0">
                     <ul>
                         <li v-for="task in currentList">
-                            <input type="checkbox" name="checked" id="checked">
+                            <input type="checkbox" name="checked" id="checked" v-model="task.checked" :disabled="isPast(selected)">
                             {{ task.text }}
                         </li>
                     </ul>
@@ -98,11 +99,9 @@
                 </template>
             </div>
         </div>
-        
-
     </div>
-</div>
 
+</div>
 
 <script src="js/vue.js"></script>
 <script src="js/main.js"></script>

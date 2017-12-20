@@ -19,14 +19,14 @@ function Calendar () {
 var taskList = [
     {
         text: "Buy christmas presents",
-        checked: false,
+        checked: true,
         starred: true,
         id: 1,
         created: "20-12-2017"
     },
     {
         text: "Send invoice",
-        checked: false,
+        checked: true,
         starred: true,
         id: 2,
         created: "20-12-2017"
@@ -254,6 +254,9 @@ var todo = new Vue({
     },
 
     methods: {
+        isPast: function (obj) {
+            return (new Date(obj.year, obj.month, obj.day)).getTime() < (new Date(this.currentYear, this.currentMonth, this.today)).getTime() ? true : false;
+        },
         isState: function (str) {
             return this.state === str;
         },
