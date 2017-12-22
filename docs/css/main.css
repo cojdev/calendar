@@ -361,7 +361,8 @@ body {
     display: none !important; } }
 
 .checked {
-  color: #aaa; }
+  color: #aaa;
+  text-decoration: line-through; }
 
 .new-task {
   position: fixed;
