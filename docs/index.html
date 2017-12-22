@@ -99,22 +99,22 @@
                         <input type="text" placeholder="Add a new task" v-model="enteredTask" @keyup.enter="addTask">
                         <label for="">Date</label>
                         <input type="date" v-model="enteredDate">
-                        <button class="button" @click>Add task</button>
+                        <button class="submit-button" @click="addTask">Add task</button>
                     </div>
                     <!-- To Do List -->
                     <div :class="{todo: isState('split'), 'todo-modal': isState('full')}" v-if="taskOpen || isState('split')">
-                        <button class="close-button" @click="closeModal"><i class="fa fa-times" aria-hidden="true"></i></button>
+                        <button class="close-button" @click="closeModal" v-if="isState('full')"><i class="fa fa-times" aria-hidden="true"></i></button>
                         <div class="todo-date">{{ formatDate(selected) }}</div>
                         <label for=""></label>
                         <input type="text" placeholder="Add a new task" v-if="!isPast(selected)" v-model="enteredTask" @keyup.enter="addTask">
+                        <button class="submit-button" @click="addTask" v-if="!isPast(selected)">Add task</button>
                         <template v-if="currentList.length !== 0">
                             <ul>
                                 <li v-for="task in currentList">
-                                    <input type="checkbox" v-model="task.checked" true-value="1" false-value="0" :disabled="isPast(selected)">
+                                    <input type="checkbox" v-model="task.checked" true-value="1" false-value="0">
                                     {{ task.text }}
                                     <div class="task-buttons">
-                                        <button class="delete-button" @click=""><i class="fa fa-times" aria-hidden="true"></i></button>
-                                        <button class="edit-button" @click=""><i class="fa fa-pencil" aria-hidden="true"></i></button>
+                                        <button class="delete-button" @click="removeTask(task)"><i class="fa fa-times" aria-hidden="true"></i></button>
                                     </div>
                                     
                                 </li>
@@ -143,7 +143,7 @@
                         </button>
                     </li>
                     <li>
-                        <button class="sidebar-button">
+                        <button class="sidebar-button" @click="saveListDB" v-if="database">
                             Save to server <i class="fa fa-floppy-o" aria-hidden="true"></i>
                         </button>
                     </li>

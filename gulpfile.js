@@ -14,7 +14,7 @@ var gulp = require('gulp'),
     cssnano = require('gulp-cssnano');
 
 var sourceFolder = 'src';
-var destFolder = 'public';
+var destFolder = 'docs';
 
 // Parse and minify Sass
 gulp.task('sass', function() {

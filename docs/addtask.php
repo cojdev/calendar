@@ -1,13 +1,6 @@
 <?php
-/**
- * Database Connection
- */
 
-// Replace with your database details
-define('DB_NAME', 'tvf_todo');
-define('DB_DSN', 'mysql:host=localhost;dbname=' . DB_NAME);
-define('DB_USER', 'root');
-define('DB_PASS', '');
+require_once 'config.php';
 
 try {
     $DB = new PDO(DB_DSN, DB_USER, DB_PASS);
@@ -22,11 +15,10 @@ if (isset($_POST['data'])) {
 
     try {
         //insert into database
-        $query = $DB->prepare('INSERT INTO todolist (text, checked, starred, date) VALUES (:text, :checked, :starred, :date)');
+        $query = $DB->prepare('INSERT INTO todolist (text, checked, date) VALUES (:text, :checked, :date)');
         $query->execute(array(
             ':text' => $data->text,
             ':checked' => $data->checked,
-            ':starred' => $data->starred,
             ':date' => $data->date
         ));
         echo "SUCCESS";

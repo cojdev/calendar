@@ -18,7 +18,7 @@ function Calendar () {
 function _parseDate (str) {
     var arr = str.split('-');
     return {
-        te: parseInt(arr[2]),
+        day: parseInt(arr[2]),
         // convert month to 0-11 format
         month: parseInt(arr[1]) - 1,
         year: parseInt(arr[0])
@@ -60,6 +60,16 @@ function _formatDateInput (obj) {
     return obj.year + "-" + (obj.month + 1) + "-" + (obj.day < 10 ? "0" + obj.day : obj.day);
 }
 
+function _isPast (obj) {
+    var today = {
+        day: (new Date()).getDate(),
+        month: (new Date()).getMonth(),
+        year: (new Date()).getFullYear()
+    };
+
+    return (new Date(obj.year, obj.month, obj.day)).getTime() < (new Date(today.year, today.month, today.day)).getTime() ? true : false;
+}
+
 /**
  * Main Vue instance
  */
@@ -83,9 +93,8 @@ var todo = new Vue({
         activeYear: date.getFullYear(),
         activeMonth: date.getMonth(),
         currentList: [],
-        dayList: [1,2,3],
+        database: false,
         taskList: [],
-        cacheList: [],
         state: "split",
         taskOpen: false,
         loaded: false,
@@ -103,7 +112,7 @@ var todo = new Vue({
     created: function () {
         this.activeMonth = this.currentMonth;
         this.enteredDate = _formatDateInput(this.todayObj);
-        this.getList();
+        this.getListDB();
         if (localStorage.getItem("savedState")) {
             this.state = localStorage.getItem("savedState");
             console.log("STATE LOADED");
@@ -207,13 +216,12 @@ var todo = new Vue({
     },
 
     methods: {
-        handleUpdate(item, index, event) {
-            var newValue = event.target.value;
-            console.log(newValue);
-            // now you can do anything with the data. you have the object that should change, the new value, its index..
-            // if you also needed the property that changes (ie. it's not only "name", you could pass that from the child, too.
+        removeTask: function (task) {
+            var index = this.taskList.indexOf(task); 
+            this.taskList.splice(index, 1);
         },
-        getList: function () {
+        
+        getListDB: function () {
             var self = this;
             var request = new XMLHttpRequest();
             request.open("GET", "todolist.php", true);
@@ -223,56 +231,59 @@ var todo = new Vue({
                     self.taskList = JSON.parse(this.response);
                     self.loaded = true;
                     console.log("GOT LIST");
+                    self.database = true;
+                }
+                else {
+                    console.log("Database List Not Found");
+                    self.database = false;
                 }
 
             };
             request.send();
         },
+        saveListDB: function () {
+            var request = new XMLHttpRequest();
+            
+            request.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.response === "SUCCESS") {
+                        alert("Task List Saved");
+                    }
+                    else {
+                        alert(this.response);
+                    }
+                    
+                }
+            };
+            console.log(JSON.stringify(this.taskList));
+            request.open("POST", "savelist.php", true);
+            request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+            request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            request.send("data="+JSON.stringify(this.taskList));
+        },
         addTask: function () {
             //Remove whitespace from start and end
             var task = this.enteredTask.trim();
 
-            if (task) {
-                //Add new a task to the start of the task list
-                this.taskList.push({
-                    text: task,
-                    checked: false,
-                    id: this.counter
-                });
-                this.counter++;
-            }
-
-        },
-        addTask: function () {
             var self = this;
 
-            var task = {
-                text: self.enteredTask.trim(),
-                checked: false,
-                starred: false,
-                date: self.activeYear + "-" + (self.activeMonth + 1) + "-" + self.today
-            };
+            if (_isPast(_parseDate(self.enteredDate)) === false) {
+                if (task) {
+                    //Add new a task to the start of the task list
+                    this.taskList.push({
+                        text: task,
+                        checked: false,
+                        date: self.enteredDate,
+                        id: Date.now()
+                    });
 
-            if (task.text) {
-                var request = new XMLHttpRequest();
+                    console.log(this.taskList[this.taskList.length - 1])
 
-                request.onreadystatechange = function() {
-                    if (this.readyState == 4 && this.status == 200) {
-                        if (this.response === "SUCCESS") {
-                            self.getList();
-                            self.enteredTask = "";
-                        }
-                        else {
-                            alert(this.response);
-                        }
-                        
-                    }
-                };
-                console.log(JSON.stringify(task));
-                request.open("POST", "addtask.php", true);
-                request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                request.send("data="+JSON.stringify(task));
+                    this.enteredTask = "";
+                }
+            }
+            else {
+                alert("Please pick today or a day in the future.");
             }
         },
         

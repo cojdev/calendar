@@ -36,6 +36,7 @@
     box-shadow: $shadow-2;
     min-width: 300px;
     max-width: 100%;
+    z-index: 8;
 }
 
 @mixin close {
@@ -52,4 +53,5 @@
     right: 0;
     bottom: 0;
     background-color: rgba(#000,0.1);
+    z-index: 7;
 }
