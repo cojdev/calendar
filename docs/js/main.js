@@ -1,13 +1,11 @@
 /**
- * 
+ * Application
  */
 
 var cal = new Calendar();
 var date = new Date();
 
-/**
- * Calendar "class"
- */
+// Store for day names and month names
 function Calendar () {
     // List of month names
     this.months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -16,90 +14,14 @@ function Calendar () {
     this.weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 }
 
-var taskList = [
-    {
-        text: "Buy christmas presents",
-        checked: true,
-        starred: true,
-        id: 1,
-        created: "20-12-2017"
-    },
-    {
-        text: "Send invoice",
-        checked: true,
-        starred: true,
-        id: 2,
-        created: "20-12-2017"
-    },
-    {
-        text: "Buy christmas presents",
-        checked: false,
-        starred: true,
-        id: 1,
-        created: "20-12-2017"
-    },
-    {
-        text: "Send invoice",
-        checked: false,
-        starred: true,
-        id: 2,
-        created: "20-12-2017"
-    },
-    {
-        text: "Do homework",
-        checked: true,
-        starred: false,
-        id: 3,
-        created: "22-12-2017"
-    },
-    {
-        text: "Tickets go on sale",
-        checked: true,
-        starred: false,
-        id: 3,
-        created: "20-11-2017"
-    },
-    {
-        text: "Go shopping",
-        checked: false,
-        starred: false,
-        id: 4,
-        created: "23-12-2017"
-    },
-    {
-        text: "Make To-do List",
-        checked: true,
-        starred: true,
-        id: 5,
-        created: "01-12-2017"
-    },
-    {
-        text: "Christmas Day",
-        checked: true,
-        starred: true,
-        id: 5,
-        created: "25-12-2017"
-    },
-    {
-        text: "Boxing Day",
-        checked: true,
-        starred: true,
-        id: 5,
-        created: "26-12-2017"
-    }
-];
-
-/**
- * Converts date from a 'dd-mm-yyyy' string to an object {day: dd, month: mm, year: yyyy}
- * @param {string} str 
- */
+// Converts date from a 'yyyy-mm-dd' string to an object {day: dd, month: mm, year: yyyy}
 function _parseDate (str) {
     var arr = str.split('-');
     return {
-        day: parseInt(arr[0]),
+        te: parseInt(arr[2]),
         // convert month to 0-11 format
         month: parseInt(arr[1]) - 1,
-        year: parseInt(arr[2])
+        year: parseInt(arr[0])
     };
 }
 
@@ -134,6 +56,10 @@ function _formatDate (obj) {
     return cal.weekdays[dateObject.getDay()] + " " + obj.day + _ordinalSuffix(obj.day) + " " + cal.months[obj.month] + ", " + obj.year;
 }
 
+function _formatDateInput (obj) {
+    return obj.year + "-" + (obj.month + 1) + "-" + (obj.day < 10 ? "0" + obj.day : obj.day);
+}
+
 /**
  * Main Vue instance
  */
@@ -149,12 +75,24 @@ var todo = new Vue({
         currentYear: date.getFullYear(),
         currentMonth: date.getMonth(),
         today: date.getDate(),
+        todayObj: {
+            day: date.getDate(),
+            month: date.getMonth(),
+            year: date.getFullYear()
+        },
         activeYear: date.getFullYear(),
         activeMonth: date.getMonth(),
         currentList: [],
         dayList: [1,2,3],
+        taskList: [],
+        cacheList: [],
         state: "split",
         taskOpen: false,
+        loaded: false,
+        newTask: false,
+        enteredTask: '',
+        enteredDate: '',
+        sidebar: false,
         selected: {
             day: date.getDate(),
             month: date.getMonth(),
@@ -164,6 +102,8 @@ var todo = new Vue({
 
     created: function () {
         this.activeMonth = this.currentMonth;
+        this.enteredDate = _formatDateInput(this.todayObj);
+        this.getList();
         if (localStorage.getItem("savedState")) {
             this.state = localStorage.getItem("savedState");
             console.log("STATE LOADED");
@@ -174,11 +114,24 @@ var todo = new Vue({
         selected: {
             handler: function () {
                 var self = this;
-                self.currentList = taskList.filter(function (a) {
+                this.enteredDate = _formatDateInput(this.selected);
+                self.currentList = this.taskList.filter(function (a) {
                     //console.log(self.selected.day);
-                    return _parseDate(a.created).day === self.selected.day &&
-                        _parseDate(a.created).month === self.selected.month &&
-                        _parseDate(a.created).year === self.selected.year;
+                    return _parseDate(a.date).day === self.selected.day &&
+                        _parseDate(a.date).month === self.selected.month &&
+                        _parseDate(a.date).year === self.selected.year;
+                })
+            },
+            deep: true
+        },
+        taskList: {
+            handler: function () {
+                var self = this;
+                self.currentList = this.taskList.filter(function (a) {
+                    //console.log(self.selected.day);
+                    return _parseDate(a.date).day === self.selected.day &&
+                        _parseDate(a.date).month === self.selected.month &&
+                        _parseDate(a.date).year === self.selected.year;
                 })
             },
             deep: true
@@ -254,11 +207,94 @@ var todo = new Vue({
     },
 
     methods: {
+        handleUpdate(item, index, event) {
+            var newValue = event.target.value;
+            console.log(newValue);
+            // now you can do anything with the data. you have the object that should change, the new value, its index..
+            // if you also needed the property that changes (ie. it's not only "name", you could pass that from the child, too.
+        },
+        getList: function () {
+            var self = this;
+            var request = new XMLHttpRequest();
+            request.open("GET", "todolist.php", true);
+            console.log("GET LIST");
+            request.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    self.taskList = JSON.parse(this.response);
+                    self.loaded = true;
+                    console.log("GOT LIST");
+                }
+
+            };
+            request.send();
+        },
+        addTask: function () {
+            //Remove whitespace from start and end
+            var task = this.enteredTask.trim();
+
+            if (task) {
+                //Add new a task to the start of the task list
+                this.taskList.push({
+                    text: task,
+                    checked: false,
+                    id: this.counter
+                });
+                this.counter++;
+            }
+
+        },
+        addTask: function () {
+            var self = this;
+
+            var task = {
+                text: self.enteredTask.trim(),
+                checked: false,
+                starred: false,
+                date: self.activeYear + "-" + (self.activeMonth + 1) + "-" + self.today
+            };
+
+            if (task.text) {
+                var request = new XMLHttpRequest();
+
+                request.onreadystatechange = function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                        if (this.response === "SUCCESS") {
+                            self.getList();
+                            self.enteredTask = "";
+                        }
+                        else {
+                            alert(this.response);
+                        }
+                        
+                    }
+                };
+                console.log(JSON.stringify(task));
+                request.open("POST", "addtask.php", true);
+                request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+                request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                request.send("data="+JSON.stringify(task));
+            }
+        },
+        
         isPast: function (obj) {
             return (new Date(obj.year, obj.month, obj.day)).getTime() < (new Date(this.currentYear, this.currentMonth, this.today)).getTime() ? true : false;
         },
+
         isState: function (str) {
             return this.state === str;
+        },
+
+        closeModal: function () {
+            if (this.taskOpen) this.taskOpen = false;
+            if (this.newTask) this.newTask = false;
+        },
+
+        closeSidebar: function () {
+            if (this.sidebar) this.sidebar = false;
+        },
+
+        toggleSidebar: function () {
+            this.sidebar = this.sidebar === true ? false : true;
         },
 
         toggleState: function () {
@@ -266,10 +302,10 @@ var todo = new Vue({
         },
 
         getTodos: function (obj) {
-            return taskList.filter(function (a) {
-                return _parseDate(a.created).day === obj.day &&
-                    _parseDate(a.created).month === obj.month &&
-                    _parseDate(a.created).year === obj.year;
+            return this.taskList.filter(function (a) {
+                return _parseDate(a.date).day === obj.day &&
+                    _parseDate(a.date).month === obj.month &&
+                    _parseDate(a.date).year === obj.year;
             });
         },
 

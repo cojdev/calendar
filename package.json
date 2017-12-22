@@ -1,7 +1,7 @@
 {
-  "name": "calendar",
+  "name": "tvf-todo",
   "version": "1.0.0",
-  "description": "Calendar Todo App",
+  "description": "Calendar Todo App for TVF Digital",
   "main": "gulpfile.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

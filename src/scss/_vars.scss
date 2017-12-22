@@ -1,0 +1,27 @@
+$font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+$line-colour: #ddd;
+$pad: 1rem;
+$border-radius: 4px;
+$primary: #28f;
+$toolbar-height: 2rem;
+
+$calendar-width: 21rem;
+$todo-width: 200px;
+$sidebar-width: 300px;
+$break: ((21 * 18) + 500) * 1px;
+
+// Breakpoints
+$sm: 640px;
+$md: 960px;
+$lg: 1280px;
+
+$br-sidebar: $break;
+
+// Transitions
+$transition-1: 150ms ease;
+$transition-2: 300ms ease;
+$transition-3: 450ms ease;
+$transition-4: 600ms ease;
+
+$shadow-1: 0 2px 5px rgba(#000, 0.1);
+$shadow-2: 0 5px 15px rgba(#000, 0.1);

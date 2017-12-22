@@ -1,0 +1,118 @@
+.todo {
+    background: white;
+    border: none;
+    padding: 1rem 2rem;
+    //width: 21rem;
+    margin: 0;
+    position: relative;
+    flex: 1;
+    min-height: 300px;
+    min-width: $todo-width;
+    box-shadow: 0 0 10px rgba(#000,0.2);
+
+    p {
+        color: #888;
+        font-size: 1rem;
+    }
+
+    input[type=text] {
+        outline: none;
+        display: block;
+        padding: .5rem;
+        font-size: 18px;
+        color: #333;
+        border: 2px solid $line-colour;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        text-align: left;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    li {
+        line-height: 1.5rem;
+        padding: .25rem;
+        border-bottom: 1px solid $line-colour;
+    }
+}
+
+.todo-modal {
+    @include modal;
+    padding: 1rem;
+    width: 400px;
+    p {
+        color: #888;
+        font-size: 1rem;
+    }
+
+    input[type=text] {
+        outline: none;
+        display: block;
+        padding: .5rem;
+        font-size: 18px;
+        color: #333;
+        border: 2px solid $line-colour;
+        width: 100%;
+        margin-bottom: 1rem;
+    }
+
+    ul {
+        text-align: left;
+        padding: 0;
+        margin: 0;
+        list-style: none;
+    }
+    
+    li {
+        line-height: 1.5rem;
+        padding: .25rem;
+        border-bottom: 1px solid $line-colour;
+    }
+}
+
+.modal-overlay {
+    @include overlay;
+    opacity: 0;
+    visibility: hidden;
+    &-open {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.close-button {
+    @include close;
+}
+
+.task-buttons {
+    float: right;
+}
+
+.edit-button, .delete-button {
+    @include button;
+
+    $size: 1.5rem;
+
+    color: #888;
+    height: $size;
+    margin-left: .5rem;
+    width: $size;
+    line-height: $size;
+}
+
+.todo-date {
+    font-size: 1.2rem;
+    font-weight: 300;
+    color: #555;
+    border-bottom: 1px solid $line-colour;
+    margin-bottom: 1rem;
+}
+
+.full-todo {
+    position: absolute;
+    background: #fff;
+}
