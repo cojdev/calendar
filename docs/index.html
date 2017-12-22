@@ -112,7 +112,7 @@
                             <ul>
                                 <li v-for="task in currentList">
                                     <input type="checkbox" v-model="task.checked" true-value="1" false-value="0">
-                                    {{ task.text }}
+                                    <span :class="{checked: task.checked === '1'}">{{ task.text }}</span>
                                     <div class="task-buttons">
                                         <button class="delete-button" @click="removeTask(task)"><i class="fa fa-times" aria-hidden="true"></i></button>
                                     </div>
@@ -130,7 +130,7 @@
             <div class="sidebar" :class="{'sidebar-open' : sidebar}">
                 <ul>
                     <li>
-                        <button class="sidebar-button" @click="newTask = true">New Task <i class="fa fa-plus" aria-hidden="true"></i></button>
+                        <button class="sidebar-button" @click="addNewTask">New Task <i class="fa fa-plus" aria-hidden="true"></i></button>
                     </li>
                     <li>
                         <button class="sidebar-button" @click="toggleState">
@@ -158,8 +158,8 @@
 
 </div>
 
-<script src="js/vue.js"></script>
-<script src="js/main.js"></script>
+<script src="js/vue.min.js"></script>
+<script src="js/main.min.js"></script>
 </body>
 
 </html>

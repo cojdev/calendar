@@ -27,6 +27,10 @@ body {
     }
 }
 
+.checked {
+    color: #aaa;
+}
+
 .new-task {
     @include modal;
     padding: 1rem;

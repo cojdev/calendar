@@ -45,7 +45,7 @@
     background: #28f;
     margin-top: 2px; }
     .calendar-list li.task-checked {
-      background-color: #888; }
+      background-color: #aaa; }
 
 @media screen and (max-width: 640px) {
   .calendar-split table {
@@ -359,6 +359,9 @@ body {
 @media screen and (min-width: 878px) {
   .mobile-only {
     display: none !important; } }
+
+.checked {
+  color: #aaa; }
 
 .new-task {
   position: fixed;

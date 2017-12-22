@@ -9,9 +9,12 @@ var gulp = require('gulp'),
     sourcemaps = require('gulp-sourcemaps'),
     filter = require('gulp-filter'),
 
-    // CSS
+    // SCSS & CSS
     sass = require('gulp-sass'),
-    cssnano = require('gulp-cssnano');
+    cssnano = require('gulp-cssnano'),
+
+    // JavaScript
+    uglify = require('gulp-uglify');
 
 var sourceFolder = 'src';
 var destFolder = 'docs';
@@ -31,9 +34,21 @@ return gulp.src(sourceFolder + '/scss/**/main.scss')
     .pipe(gulp.dest(destFolder + '/css'))
 });
 
+gulp.task('js', function() {
+	return gulp.src(sourceFolder + '/js/main.js')
+		.pipe(sourcemaps.init())
+		.pipe(gulp.dest(destFolder + '/js'))
+		.pipe(rename('main.min.js'))
+		.pipe(uglify())
+		.pipe(sourcemaps.write('./'))
+		.pipe(gulp.dest(destFolder + '/js'))
+});
+
+
 // Watch edits
 gulp.task('watch', function(){
-gulp.watch(sourceFolder + '/**/*.scss', ['sass']);
+    gulp.watch(sourceFolder + '/**/*.scss', ['sass']);
+    gulp.watch(sourceFolder + '/**/*.js', ['js']);
 });
 
 // Default task
