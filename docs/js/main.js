@@ -227,7 +227,7 @@ var todo = new Vue({
             request.open("GET", "todolist.php", true);
             console.log("GET LIST");
             request.onreadystatechange = function() {
-                if (this.readyState == 4 && this.status == 200) {
+                if (this.readyState == 4 && this.status == 200 && this.response !== 0) {
                     self.taskList = JSON.parse(this.response);
                     self.loaded = true;
                     console.log("GOT LIST");
