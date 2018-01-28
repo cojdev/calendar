@@ -1,3 +1,6 @@
+-- Create database
+
+CREATE DATABASE `calendar_app`
 
 --
 -- Table structure for table `todolist`
@@ -10,3 +13,5 @@ CREATE TABLE `todolist` (
   `starred` tinyint(1) NOT NULL,
   `date` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
