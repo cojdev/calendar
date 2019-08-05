@@ -18,13 +18,3 @@ There are 2 views, “Full” and “Split”. “Full” has the calendar filli
 
 The complete task list for all days can be saved to a MySQL database using the PHP PDO Class and prepared statement to prevent SQL injections. The Front End can communicate with the Back End using AJAX and dynamically generated JSON files.
 The SQL commands to create the necessary table are in “init.sql”.
-
-## Potential Additions
-
-Given more time, I would look to implement following based on suggestions from others and my own ideas.
-
-* When showing this app various people, a commonly suggested feature was the ability to shared task lists over email or social media.
-* Another common suggestion was the ability to see more than one month at a time.
-* The ability to group tasks and colour code them.
-* The ability to edit tasks
-* The ability to view all tasks at once.
