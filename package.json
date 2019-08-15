@@ -2,9 +2,13 @@
   "name": "calendar",
   "version": "1.0.0",
   "description": "Calendar Todo App",
-  "main": "gulpfile.js",
+  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "webpack-dev-server --open --mode development",
+    "build": "webpack --mode production --progress",
+    "dev": "webpack --mode development --progress",
+    "dev-watch": "webpack --mode development --watch --progress"
   },
   "keywords": [
     "Calendar",
@@ -13,13 +17,12 @@
   "author": "Charles Ojukwu",
   "license": "ISC",
   "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-cssnano": "^2.1.2",
-    "gulp-filter": "^5.1.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.3",
-    "gulp-uglify": "^3.0.0"
+    "ts-loader": "^6.0.4",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3",
+    "webpack": "^4.39.1",
+    "webpack-cli": "^3.3.6",
+    "webpack-dev-server": "^3.8.0"
   },
   "directories": {
     "doc": "docs"

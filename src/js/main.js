@@ -5,71 +5,6 @@
 var cal = new Calendar();
 var date = new Date();
 
-// Store for day names and month names
-function Calendar () {
-    // List of month names
-    this.months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-    // List of weekday names
-    this.weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-}
-
-// Converts date from a 'yyyy-mm-dd' string to an object {day: dd, month: mm, year: yyyy}
-function _parseDate (str) {
-    var arr = str.split('-');
-    return {
-        day: parseInt(arr[2]),
-        // convert month to 0-11 format
-        month: parseInt(arr[1]) - 1,
-        year: parseInt(arr[0])
-    };
-}
-
-function _ordinalSuffix(num) {
-    var list = ['st', 'nd', 'rd', 'th'];
-    if (num % 100 < 10 || num % 100 > 13) {
-        switch (num % 10) {
-            case 1:
-                return list[0];
-                break;
-            case 2:
-                return list[1];
-                break;
-            case 3:
-                return list[2];
-                break;
-            default:
-                return list[3];
-                break;
-        }
-    }
-    else {
-        return list[3];
-    }
-    
-    var output;
-    return
-}
-
-function _formatDate (obj) {
-    var dateObject = new Date(obj.year, obj.month, obj.day);
-    return cal.weekdays[dateObject.getDay()] + " " + obj.day + _ordinalSuffix(obj.day) + " " + cal.months[obj.month] + ", " + obj.year;
-}
-
-function _formatDateInput (obj) {
-    return obj.year + "-" + (obj.month + 1) + "-" + (obj.day < 10 ? "0" + obj.day : obj.day);
-}
-
-function _isPast (obj) {
-    var today = {
-        day: (new Date()).getDate(),
-        month: (new Date()).getMonth(),
-        year: (new Date()).getFullYear()
-    };
-
-    return (new Date(obj.year, obj.month, obj.day)).getTime() < (new Date(today.year, today.month, today.day)).getTime() ? true : false;
-}
-
 /**
  * Main Vue instance
  */
@@ -311,7 +246,7 @@ var todo = new Vue({
         },
 
         toggleSidebar: function () {
-            this.sidebar = this.sidebar === true ? false : true;
+            this.sidebar = !this.sidebar;
         },
 
         toggleState: function () {
@@ -353,21 +288,21 @@ var todo = new Vue({
         },
 
         prevMonth: function () {
+            // jan to dec
             if (this.activeMonth === 0) {
                 this.activeMonth = 11;
                 this.activeYear--;
-            }
-            else {
+            } else {
                 this.activeMonth--;
             }
         },
 
         nextMonth: function () {
+            // dec to jan
             if (this.activeMonth === 11) {
                 this.activeMonth = 0;
                 this.activeYear++;
-            }
-            else {
+            } else {
                 this.activeMonth++;
             }
         },
