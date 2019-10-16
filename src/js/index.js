@@ -1,14 +1,16 @@
+import Vue from 'vue';
+import Calendar from './Calendar';
 /**
  * Application
  */
 
-var cal = new Calendar();
+var cal = Calendar;
 var date = new Date();
 
 /**
  * Main Vue instance
  */
-var todo = new Vue({
+var todo = new Vue ({
 
     el: '#app',
 
