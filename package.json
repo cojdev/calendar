@@ -22,10 +22,7 @@
     "typescript": "^3.5.3",
     "webpack": "^4.39.1",
     "webpack-cli": "^3.3.6",
-    "webpack-dev-server": "^3.8.0",
-    "eslint": "^5.9.0",
-    "eslint-config-airbnb": "^17.1.0",
-    "eslint-plugin-import": "^2.14.0"
+    "webpack-dev-server": "^3.8.0"
   },
   "directories": {
     "doc": "docs"

@@ -23,5 +23,3 @@ $row = $query->fetchAll();
 $output = json_encode($row);
 
 print_r($output);
-
-?>

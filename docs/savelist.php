@@ -47,5 +47,3 @@ if (isset($_POST['data'])) {
 else {
     echo "No data found.";
 }
-
-?>

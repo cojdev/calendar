@@ -1,3 +1,5 @@
+import Calendar from "./Calendar";
+
 interface DateObject {
   day: number,
   month: number,
@@ -5,7 +7,7 @@ interface DateObject {
 }
 
 // Converts date from a 'yyyy-mm-dd' string to an object {day: dd, month: mm, year: yyyy}
-function _parseDate(str: string): DateObject {
+export function parseDate(str: string): DateObject {
   var arr = str.split('-');
   return {
     day: parseInt(arr[2], 10),
@@ -15,7 +17,7 @@ function _parseDate(str: string): DateObject {
   };
 }
 
-function _ordinalSuffix(num: number): string {
+export function ordinalSuffix(num: number): string {
   var suffixes = ['st', 'nd', 'rd', 'th'];
   if (num % 100 < 10 || num % 100 > 13) {
     switch (num % 10) {
@@ -37,16 +39,16 @@ function _ordinalSuffix(num: number): string {
  * Convert from date object to 12th August, 2019 format
  * @param {DateObject} obj Date object {day, month, year}
  */
-function _formatDate(obj: DateObject): string {
+export function formatDate(obj: DateObject): string {
   var dateObject = new Date(obj.year, obj.month, obj.day);
-  return cal.weekdays[dateObject.getDay()] + " " + obj.day + _ordinalSuffix(obj.day) + " " + cal.months[obj.month] + ", " + obj.year;
+  return Calendar.days[dateObject.getDay()] + " " + obj.day + ordinalSuffix(obj.day) + " " + Calendar.months[obj.month] + ", " + obj.year;
 }
 
 /**
  * Convert from date object to 2019-08-12
  * @param {DateObject} obj Date object {day, month, year}
  */
-function _formatDateInput(obj: DateObject): string {
+export function formatDateInput(obj: DateObject): string {
   return obj.year + "-" + (obj.month + 1) + "-" + (obj.day < 10 ? "0" + obj.day : obj.day);
 }
 
@@ -54,7 +56,7 @@ function _formatDateInput(obj: DateObject): string {
  * Check if the supplied date occurred before today
  * @param {DateObject} obj 
  */
-function _isPast(obj: DateObject): boolean {
+export function isPast(obj: DateObject): boolean {
   var today = {
     day: (new Date()).getDate(),
     month: (new Date()).getMonth(),
