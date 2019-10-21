@@ -7,7 +7,11 @@ RUN docker-php-ext-install pdo pdo_mysql mysqli
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # install nano and git
-RUN apt-get update && apt-get install nano git -y
+RUN apt-get update && apt-get install nano git unzip -y
+
+RUN cd /var/www/html/api \
+    && composer require slim/slim "^3.12" \
+    && composer require slim/psr7
 
 # enable mod_rewrite
 RUN a2enmod rewrite 

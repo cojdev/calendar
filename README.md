@@ -16,5 +16,12 @@ There are 2 views, “Full” and “Split”. “Full” has the calendar filli
 
 ## Back End
 
+### Setup
+
+#### Access docker database
+```
+
+```
+
 The complete task list for all days can be saved to a MySQL database using the PHP PDO Class and prepared statement to prevent SQL injections. The Front End can communicate with the Back End using AJAX and dynamically generated JSON files.
 The SQL commands to create the necessary table are in “init.sql”.
