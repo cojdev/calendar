@@ -16,6 +16,20 @@ There are 2 views, “Full” and “Split”. “Full” has the calendar filli
 
 ## Back End
 
+### Task model
+
+```json
+{
+  "id": "unique identifier",
+  "description": "task description",
+  "completed": "date completed. NULL if not completed",
+  "starred": "Int. highlighted tasks",
+  "created": "date created",
+  "modified": "date edited",
+  "due": "due date"
+}
+```
+
 ### Setup
 
 #### Access docker database

@@ -3,8 +3,8 @@ USE `todoapp`;
 CREATE TABLE IF NOT EXISTS `Task` (
   `id` INT(11) AUTO_INCREMENT PRIMARY KEY,
   `description` VARCHAR(255) NOT NULL,
-  `completed` TINYINT(1) NOT NULL,
-  `starred` TINYINT(1) NOT NULL,
+  `completed` DATETIME,
+  `starred` TINYINT(1) DEFAULT 0,
   `created` DATETIME DEFAULT CURRENT_TIMESTAMP,
   `modified` DATETIME ON UPDATE CURRENT_TIMESTAMP,
   `due` DATETIME

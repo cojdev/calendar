@@ -9,7 +9,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # install nano and git
 RUN apt-get update && apt-get install nano git unzip -y
 
-RUN cd /var/www/html/api \
+RUN cd /var/www/html \
     && composer require slim/slim "^3.12" \
     && composer require slim/psr7
 

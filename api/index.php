@@ -2,28 +2,27 @@
 
 use \Psr\Http\Message\ServerRequestInterface as Request;
 use \Psr\Http\Message\ResponseInterface as Response;
+use \Slim\App as App;
+use \Task as Task;
 
 require_once 'vendor/autoload.php';
 
 session_start();
 
-// $loader = new \Twig\Loader\FilesystemLoader('../views');
-
-$config['db'] = [
-  'host'   => 'localhost',
-  'user'   => 'todo',
-  'pass'   => 'todo',
-  'dbname' => 'todo'
+// Configuration
+$config = [
+  'db' => [
+    'host'   => '192.168.99.100:3320',
+    'user'   => 'user',
+    'pass'   => 'pass',
+    'dbname' => 'todoapp'
+  ],
+  'displayErrorDetails' => true,
 ];
 
-$config['displayErrorDetails'] = true;
-
-$app = new \Slim\App(['settings' => $config]);
+$app = new App(['settings' => $config]);
 
 $container = $app->getContainer();
-
-// $container['view'] = new \Twig\Environment($loader);
-
 $container['db'] = function ($c) {
   $db = $c['settings']['db'];
   try {
@@ -42,51 +41,58 @@ $container['db'] = function ($c) {
   return $pdo;
 };
 
-// require_once './../routes/app.php';
-
 $app->get('/', function (Request $request, Response $response, array $args) {
-  // $name = $args['name'];
   $data = [
     'foo' => 'bar',
     'fizz' => 'buzz',
+    'args' => $args,
   ];
-  // $response->getBody()->write("Hello, $name");
 
   return $response->withJson($data);
 });
 
+// get tasks
 $app->get('/task[/[{id}]]', function ($request, $response, $args) {
   $model = new Task($this->db);
 
-  // Single Task
+  // get single task by id
   if ($args['id']) {
-      $task = $model->get($args['id']);
-      
-      if ($task->success === false) {
-          // Utility::pre_dump($task);
-          // $this->response = 
-          $html = $this->view->render('error.twig', [
-              "code" => $task['code'],
-              "message" => $task['message'],
-          ]);
-          
-          return $response->withStatus($task['code'])->write($html);
-      }
-
-      // Utility::pre_dump($task);
-  
-      $html = $this->view->render('task.twig', $task);
-  // Task list
+    $ret = $model->get($args['id']);
+  // get all tasks
   } else {
-      $tasks = $model->getAll();
-  
-      $html = $this->view->render('index.twig', [
-          'heading' => 'Tasks',
-          'tasks' => $tasks,
-      ]);
+    $ret = $model->getAll();
   }
 
-  return $response->write($html);
+  if (!$ret['success']) {
+    $ret = [
+      "code" => $ret['code'],
+      "message" => $ret['message'],
+    ];
+  }
+
+  return $response->withJson($ret, $ret['code'] ?: 200);
 });
 
+// add task
+$app->post('/task/add', function ($request, $response, $args) {
+  $body = $request->getParsedBody();
+  $body['due'] = strtotime($body['due']);
+  $body['due'] = date('Y-m-d H:i:s', $body['due']);
+
+  $model = new Task($this->db);
+  $ret = $model->add($body);
+
+  return $response->withJson($ret, $ret['code'] ?: 200);
+});
+
+// delete task
+$app->delete('/task/{id}', function ($request, $response, $args) {
+  $model = new Task($this->db);
+  $ret = $model->delete($args['id']);
+
+  return $response->withJson($ret, $ret['code'] ?: 200);
+});
+
+
+// run application
 $app->run();

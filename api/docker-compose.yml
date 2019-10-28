@@ -17,7 +17,7 @@ services:
     restart: always
     volumes:
       - todo_db:/var/lib/mysql
-      - ./db/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+      - ./setup/schema.sql:/docker-entrypoint-initdb.d/setup.sql
     ports:
       - 3320:3306
     environment:

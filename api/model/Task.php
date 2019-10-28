@@ -1,81 +1,55 @@
 <?php
 
-class Post
+class Task
 {
 
   private $db;
 
-  function __construct($connection)
-  {
+  function __construct($connection) {
     $this->db = $connection;
   }
 
-  function getAll($limit = 9)
+  function getAll($limit = 20)
   {
     try {
-      $query = $this->db->query(
-        "SELECT
-                    Post.id AS id,
-                    Post.title AS title,
-                    Post.body AS body,
-                    Post.created AS created,
-                    User.name AS author
-                FROM
-                    Post
-                INNER JOIN
-                    User ON Post.author = User.id
-                ORDER BY
-                    Post.created DESC
-                LIMIT
-                    $limit"
-      );
-
+      $query = $this->db->query("SELECT * FROM Task ORDER BY Task.created DESC LIMIT $limit");
       $result = $query->fetchAll();
 
-      foreach ($result as $key => $value) {
-        $result[$key]['date'] = date('jS M y', strtotime($result[$key]['created']));
-      }
-
-      // Utility::pre_dump($result);
-      return $result;
-    } catch (PDOException $e) {
-      die($e->getMessage());
-    } catch (Exception $e) {
-      die($e->getMessage());
-    }
-  }
-
-  function get($id)
-  {
-    try {
-      $query = $this->db->query(
-        "SELECT
-                    Post.id AS id,
-                    Post.title AS title,
-                    Post.body AS body,
-                    Post.created AS created,
-                    User.name AS author
-                FROM
-                    Post
-                INNER JOIN
-                    User ON Post.author = User.id
-                WHERE
-                    Post.id={$id}"
-      );
-
-      $result = $query ? $query->fetch() : false;
-
-      $result['date'] = date('jSF, Y', strtotime($result['created']));
-
       if ($result) {
-        // die($result);
-        return $result;
+        return [
+          'success' => true,
+          'data' => $result,
+        ];
       }
 
       return [
         'success' => false,
         "code" => 404,
-        'message' => "Post not found"
+        'message' => "No tasks not found"
+      ];
+    } catch (PDOException $e) {
+      die($e->getMessage());
+    } catch (Exception $e) {
+      die($e->getMessage());
+    }
+  }
+
+  function get($id) {
+    try {
+      $query = $this->db->query("SELECT * FROM Task WHERE Task.id={$id}");
+      $result = $query ? $query->fetch() : false;
+  
+      if ($result) {
+        return [
+          'success' => true,
+          'data' => $result,
+        ];
+      }
+
+      return [
+        'success' => false,
+        "code" => 404,
+        'message' => "Task not found"
       ];
     } catch (PDOException $e) {
       return [
@@ -92,40 +66,45 @@ class Post
     }
   }
 
-  function add($data)
-  {
-    // Utility::pre_dump($data);
-    // die($this->db);
+  function add($data) {
     try {
+      // validation
+      if ($data['description'] === '') {
+        throw new Exception("No description provided.", 69);
+      }
+      if (strtotime($data['due']) < strtotime(date('Y-m-d h:i:s'))) {
+        throw new Exception("Date due date cannot be before now.", 69);
+        
+      }
+
       $query = $this->db->prepare(
         "INSERT INTO
-                    Post (
-                        title,
-                        author,
-                        body,
-                        created,
-                        modified
-                    )
-                VALUES
-                    (
-                        ?,
-                        ?,
-                        ?,
-                        NOW(),
-                        NOW()
-                    )"
+          Task (
+            description,
+            starred,
+            due,
+            created
+          )
+      VALUES
+          (
+            ?,
+            ?,
+            ?,
+            NOW()
+          )"
       );
 
       $result = $query->execute([
-        $data['title'],
-        $data['author'],
-        $data['body'],
+        $data['description'],
+        $data['starred'],
+        $data['due'],
       ]);
 
-      if ($result === true) {
+      if ($result) {
         return [
           'success' => true,
-          'message' => 'Post added'
+          'message' => 'Task added',
+          'requestBody' => $data,
         ];
       }
 
@@ -133,18 +112,29 @@ class Post
         'success' => false,
         "code" => 400,
         'message' => "Bad Request",
+        'requestBody' => $data,
       ];
     } catch (PDOException $e) {
       return [
         'success' => false,
         "code" => 500,
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
+        'requestBody' => $data,
       ];
     } catch (Exception $e) {
+      if ($e->getCode() === 69) {
+        return [
+          'success' => false,
+          "code" => 400,
+          'message' => 'Validation Error: ' . $e->getMessage(),
+          'requestBody' => $data,
+        ];
+      }
       return [
         'success' => false,
         "code" => 500,
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
+        'requestBody' => $data,
       ];
     }
   }
@@ -154,14 +144,14 @@ class Post
     //
     // Utility::pre_dump($id);
     $sql = "UPDATE
-                    Post
-                SET
-                    title=?,
-                    author=?,
-                    body=?,
-                    modified=NOW()
-                WHERE
-                    id=?";
+          Task
+      SET
+        title=?,
+        author=?,
+        body=?,
+        modified=NOW()
+      WHERE
+        id=?";
 
     try {
       $result = $this->db->prepare($sql);
@@ -176,14 +166,14 @@ class Post
       if ($result === true) {
         return [
           'success' => true,
-          'message' => 'Post modifed'
+          'message' => 'Task modifed'
         ];
       }
 
       return [
         'success' => false,
         "code" => 404,
-        'message' => "Post not found"
+        'message' => "Task not found"
       ];
     } catch (PDOException $e) {
       return [
@@ -200,40 +190,34 @@ class Post
     }
   }
 
-  function delete($id)
-  {
-    // Utility::pre_dump($id);
-    $sql = "DELETE FROM
-                    Post
-                WHERE
-                    id={$id}";
-    // die($sql);
+  function delete($id) {
     try {
-      $result = $this->db->query($sql);
+      $query = $this->db->prepare("DELETE FROM Task WHERE id=?");
+      $result = $query->execute([$id]);
 
-      // Utility::pre_dump($result);
-      if ($result !== false) {
+      if ($result) {
         return [
           'success' => true,
-          'message' => 'Post deleted'
+          'message' => 'Task deleted'
         ];
       }
 
       return [
         'success' => false,
-        'message' => 'Unknown Error [1]'
+        'code' => 400,
+        'message' => 'Bad request',
       ];
     } catch (PDOException $e) {
       return [
         'success' => false,
         "code" => 500,
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
       ];
     } catch (Exception $e) {
       return [
         'success' => false,
         "code" => 500,
-        'message' => $e->getMessage()
+        'message' => $e->getMessage(),
       ];
     }
   }
