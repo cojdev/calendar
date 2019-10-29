@@ -9,8 +9,7 @@ class Task
     $this->db = $connection;
   }
 
-  function getAll($limit = 20)
-  {
+  function getAll($limit = 20) {
     try {
       $query = $this->db->query("SELECT * FROM Task ORDER BY Task.created DESC LIMIT $limit");
       $result = $query->fetchAll();
@@ -36,8 +35,9 @@ class Task
 
   function get($id) {
     try {
-      $query = $this->db->query("SELECT * FROM Task WHERE Task.id={$id}");
-      $result = $query ? $query->fetch() : false;
+      $query = $this->db->prepare("SELECT * FROM Task WHERE id=?");
+      $query->execute([$id]);
+      $result = $query->rowCount() ? $query->fetch() : false;
   
       if ($result) {
         return [
@@ -78,20 +78,15 @@ class Task
       }
 
       $query = $this->db->prepare(
-        "INSERT INTO
+        'INSERT INTO
           Task (
             description,
             starred,
             due,
             created
           )
-      VALUES
-          (
-            ?,
-            ?,
-            ?,
-            NOW()
-          )"
+        VALUES
+          (?,?,?,NOW())'
       );
 
       $result = $query->execute([
@@ -100,11 +95,15 @@ class Task
         $data['due'],
       ]);
 
+      $id = $this->db->query('SELECT LAST_INSERT_ID()')->fetch();
+
       if ($result) {
         return [
           'success' => true,
           'message' => 'Task added',
+          'url' => '/task/'.$id[0],
           'requestBody' => $data,
+          'id' => $id,
         ];
       }
 
@@ -139,34 +138,34 @@ class Task
     }
   }
 
-  function edit($id, $data)
-  {
-    //
-    // Utility::pre_dump($id);
-    $sql = "UPDATE
+  function edit($id, $data) {
+    // die(print_r($data, true));
+    try {
+      $result = $this->db->prepare(
+        "UPDATE
           Task
       SET
-        title=?,
-        author=?,
-        body=?,
+        description=?,
+        starred=?,
+        due=?,
         modified=NOW()
       WHERE
-        id=?";
-
-    try {
-      $result = $this->db->prepare($sql);
+        id=?"
+      );
+      
       $result->execute([
-        $data['title'],
-        $data['author'],
-        $data['body'],
+        $data['description'],
+        $data['starred'],
+        $data['due'],
         $id,
       ]);
 
-      // Utility::pre_dump($result);
-      if ($result === true) {
+      if ($result->rowCount()) {
         return [
           'success' => true,
-          'message' => 'Task modifed'
+          'message' => 'Task modifed',
+          'id' => $id,
+          
         ];
       }
 
@@ -178,13 +177,13 @@ class Task
     } catch (PDOException $e) {
       return [
         'success' => false,
-        "code" => 500,
+        'code' => 500,
         'message' => $e->getMessage()
       ];
     } catch (Exception $e) {
       return [
         'success' => false,
-        "code" => 500,
+        'code' => 500,
         'message' => $e->getMessage()
       ];
     }
@@ -192,20 +191,21 @@ class Task
 
   function delete($id) {
     try {
-      $query = $this->db->prepare("DELETE FROM Task WHERE id=?");
-      $result = $query->execute([$id]);
+      $result = $this->db->prepare("DELETE FROM Task WHERE id=?");
+      $result->execute([$id]);
 
-      if ($result) {
+      if ($result->rowCount()) {
         return [
           'success' => true,
-          'message' => 'Task deleted'
+          'message' => 'Task deleted',
+          'id' => $id,
         ];
       }
 
       return [
         'success' => false,
         'code' => 400,
-        'message' => 'Bad request',
+        'message' => 'Unknown Error. No tasks deleted',
       ];
     } catch (PDOException $e) {
       return [

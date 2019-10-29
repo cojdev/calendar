@@ -1,23 +1,29 @@
 function ajax(url, method, requestBody = null) {
   return new Promise((resolve, reject) => {
-    const req = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
 
-    req.onload = () => {
-      if (req.status >= 200 && req.status < 400) {
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 400) {
         // Success!
-        resolve(req.responseText);
+        resolve({
+          raw: xhr.responseText,
+          parsed: JSON.parse(xhr.responseText),
+        });
       } else {
         // We reached our target server, but it returned an error
-        reject(req.responseText);
+        reject({
+          raw: xhr.responseText,
+          parsed: JSON.parse(xhr.responseText),
+        });
       }
     };
 
-    req.open(method, url);
+    xhr.open(method, url);
     
-    if (method === 'POST') {
-      req.setRequestHeader("Content-Type", "application/json");
-    }
+    // if (method === 'POST') {
+      xhr.setRequestHeader("Content-Type", "application/json");
+    // }
 
-    req.send(JSON.stringify(requestBody));
+    xhr.send(JSON.stringify(requestBody));
   });
 }

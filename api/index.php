@@ -74,13 +74,29 @@ $app->get('/task[/[{id}]]', function ($request, $response, $args) {
 });
 
 // add task
-$app->post('/task/add', function ($request, $response, $args) {
+$app->post('/task', function ($request, $response, $args) {
   $body = $request->getParsedBody();
+  
+  // convert to sql datetime
   $body['due'] = strtotime($body['due']);
   $body['due'] = date('Y-m-d H:i:s', $body['due']);
 
   $model = new Task($this->db);
   $ret = $model->add($body);
+
+  return $response->withJson($ret, $ret['code'] ?: 200);
+});
+
+// edit task
+$app->patch('/task/{id}', function ($request, $response, $args) {
+  $body = $request->getParsedBody();
+
+  // convert to sql datetime
+  $body['due'] = strtotime($body['due']);
+  $body['due'] = date('Y-m-d H:i:s', $body['due']);
+
+  $model = new Task($this->db);
+  $ret = $model->edit($args['id'], $body);
 
   return $response->withJson($ret, $ret['code'] ?: 200);
 });

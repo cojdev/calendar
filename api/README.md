@@ -44,6 +44,14 @@
 }
 ```
 
+### DELETE `/task/{id}`
+```
+```
+
+### PATCH `/task/{id}`
+```
+```
+
 ## Model
 
 ### Task

@@ -1,0 +1,37 @@
+body {
+  background: #f8f8f8;
+  color: #444;
+  font-family: 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 700;
+  /* color: #222; */
+}
+
+input,
+select,
+textarea {
+  display: block;
+  background-color: #fff;
+  border: 1px solid #eee;
+  padding: 1ch;
+  line-height: 1;
+  font-size: 1rem;
+  font-family: inherit;
+  margin-bottom: 1ch;
+}
+
+pre {
+  display: block;
+  overflow: auto;
+  line-height: 1.1;
+  background-color: #667;
+  color: #fff;
+  font-size: 12px;
+  max-height: 500px;
+  padding: 1ch;
+}

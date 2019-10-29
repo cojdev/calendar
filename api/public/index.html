@@ -6,24 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Todo App</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
   <h1>Todo App</h1>
   <h2>Add task</h2>
   <form id="add-form">
-    <input type="text" name="description" id="description" placeholder="What do you need to do?"><br>
+    <input type="text" name="description" id="description" placeholder="What do you need to do?">
 
-    <label for="starred">Starred</label><br>
-    <input type="checkbox" name="starred" id="starred"><br>
+    <label for="starred">Starred</label>
+    <input type="checkbox" name="starred" id="starred">
 
-    <label for="due">due</label><br>
-    <input type="date" name="due" id="due"><br>
+    <label for="due">due</label>
+    <input type="date" name="due" id="due">
 
     <button type="submit">Add</button>
   </form>
 
-  <div class="output"></div>
+  <div class="output">Loading...</div>
 
   <script src="helpers.js"></script>
   <script>
@@ -42,20 +43,20 @@
         due: form.querySelector('[name=due]').value,
       };
       
-      ajax(`/task/add`, 'POST', data)
+      ajax(`/task`, 'POST', data)
       .then(data => {
-        console.log(data);
+        console.log(data.parsed);
         loadTasks();
       })
       .catch(data => {
-        console.log(data);
+        console.log(data.parsed);
       });
     }
 
     function deleteTask(id) {
       ajax(`/task/${id}`, 'DELETE')
-      .then(() => {
-        console.log(JSON.parse(this.responseText));
+      .then(data => {
+        console.log(data.parsed);
         loadTasks();
       });
     }
@@ -63,7 +64,7 @@
     function loadTasks() {
       ajax('/task', 'GET')
       .then(data => {
-        const json = JSON.parse(data);
+        const json = data.parsed;
         output.innerHTML = 
         `<ul>
           ${json.data.map(item => `<li>${item.description} - ${item.due}${item.starred ? ' - star' : ''} - 
