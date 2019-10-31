@@ -12,7 +12,7 @@ class Task
   function getAll($limit = 20) {
     try {
       $query = $this->db->query("SELECT * FROM Task ORDER BY Task.created DESC LIMIT $limit");
-      $result = $query->fetchAll();
+      $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
       if ($result) {
         return [
@@ -37,7 +37,7 @@ class Task
     try {
       $query = $this->db->prepare("SELECT * FROM Task WHERE id=?");
       $query->execute([$id]);
-      $result = $query->rowCount() ? $query->fetch() : false;
+      $result = $query->rowCount() ? $query->fetch(PDO::FETCH_ASSOC) : false;
   
       if ($result) {
         return [
@@ -103,7 +103,7 @@ class Task
           'message' => 'Task added',
           'url' => '/task/'.$id[0],
           'requestBody' => $data,
-          'id' => $id,
+          'id' => $id[0],
         ];
       }
 
@@ -164,7 +164,7 @@ class Task
         return [
           'success' => true,
           'message' => 'Task modifed',
-          'id' => $id,
+          'id' => $id[0],
           
         ];
       }
@@ -198,7 +198,7 @@ class Task
         return [
           'success' => true,
           'message' => 'Task deleted',
-          'id' => $id,
+          'id' => $id[0],
         ];
       }
 

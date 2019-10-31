@@ -10,38 +10,52 @@
 </head>
 
 <body>
-  <h1>API Endpoint Playground</h1>
-  <form>
-    <label for="endpoint">endpoint</label>
-    <select name="endpoint" id="endpoint">
-      <option value="/task">/task</option>
-      <option value="/task/[id]">/task/[id]</option>
-    </select>
+  <main>
+    <h1>API Endpoint Playground</h1>
+    <form>
+      <div class="row">
+        <div class="column">
+          <label for="endpoint">endpoint</label>
+          <select name="endpoint" id="endpoint">
+            <option value="/task">/task</option>
+            <option value="/task/[id]">/task/[id]</option>
+          </select>
+        </div>
 
-    <label for="id">id</label>
-    <input type="text" name="id" id="id">
+        <div class="column">
+          <label for="method">method</label>
+          <select name="method" id="method">
+            <option value="GET">GET</option>
+            <option value="POST">POST</option>
+            <option value="PATCH">PATCH</option>
+            <option value="DELETE">DELETE</option>
+          </select>
+        </div>
+      </div>
 
-    <label for="method">method</label>
-    <select name="method" id="method">
-      <option value="GET">GET</option>
-      <option value="POST">POST</option>
-      <option value="PATCH">PATCH</option>
-      <option value="DELETE">DELETE</option>
-    </select>
+      <label for="id">id</label>
+      <input type="text" name="id" id="id">
 
-    <label for="resquet-body">request body</label>
-    <textarea name="request-body" id="request-body" cols="50" rows="6">
+      <label for="resquet-body">request body</label>
+      <textarea name="request-body" id="request-body" cols="50" rows="6">
 {
   "description": "what needs to be done",
   "due": "2019-12-25",
   "starred": false
 }
-    </textarea>
+      </textarea>
 
-    <button type="submit">Send</button>
-  </form>
+      <button type="submit">Send</button><br>
 
-  <div id="response"></div>
+      <label for="response">response</label>
+      <output id="response">
+        <pre>
+// response
+        </pre>
+      </output>
+    </form>
+  </main>
+
 
   <script src="helpers.js"></script>
   <script>
@@ -55,14 +69,14 @@
       console.log(body);
 
       ajax(url, qs('#method').value, body)
-      .then(data => {
-        console.log(data.parsed);
-        qs('#response').innerHTML = `<pre>${JSON.stringify(data.parsed, null, 2)}</pre>`;
-      })
-      .catch(data => {
-        console.log(data.parsed);
-        qs('#response').innerHTML = `<pre>${JSON.stringify(data.parsed, null, 2)}</pre>`;
-      });
+        .then(data => {
+          console.log(data.parsed);
+          qs('#response pre').innerHTML = `${JSON.stringify(data.parsed, null, 2)}`;
+        })
+        .catch(data => {
+          console.log(data.parsed);
+          qs('#response pre').innerHTML = `${JSON.stringify(data.parsed, null, 2)}`;
+        });
     });
   </script>
 </body>

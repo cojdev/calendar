@@ -20,9 +20,9 @@ function ajax(url, method, requestBody = null) {
 
     xhr.open(method, url);
     
-    // if (method === 'POST') {
+    if (['POST', 'PUT'].includes(method)) {
       xhr.setRequestHeader("Content-Type", "application/json");
-    // }
+    }
 
     xhr.send(JSON.stringify(requestBody));
   });
