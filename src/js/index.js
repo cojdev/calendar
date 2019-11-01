@@ -1,24 +1,25 @@
 import Vue from 'vue';
 import Calendar from './Calendar';
-import { formatDateInput } from './helpers';
+import {
+  formatDateInput, parseDate, formatDate, ajax,
+} from './helpers';
+import config from './config';
 /**
  * Application
  */
 
 // var cal = new Calendar();
-var date = new Date();
+const date = new Date();
 
 /**
  * Main Vue instance
  */
-var todo = new Vue({
+const todo = new Vue({
 
   el: '#app',
 
   data: {
-    weekdayNames: Calendar.days.map(function (a) {
-      return a.slice(0, 3);
-    }),
+    weekdayNames: Calendar.days.map(a => a.slice(0, 3)),
     monthNames: Calendar.months,
     currentYear: date.getFullYear(),
     currentMonth: date.getMonth(),
@@ -26,14 +27,14 @@ var todo = new Vue({
     todayObj: {
       day: date.getDate(),
       month: date.getMonth(),
-      year: date.getFullYear()
+      year: date.getFullYear(),
     },
     activeYear: date.getFullYear(),
     activeMonth: date.getMonth(),
     currentList: [],
     database: false,
     taskList: [],
-    state: "split",
+    state: 'split',
     taskOpen: false,
     loaded: false,
     newTask: false,
@@ -43,79 +44,72 @@ var todo = new Vue({
     selected: {
       day: date.getDate(),
       month: date.getMonth(),
-      year: date.getFullYear()
-    }
+      year: date.getFullYear(),
+    },
   },
 
-  created: function () {
+  created() {
     this.activeMonth = this.currentMonth;
     this.enteredDate = formatDateInput(this.todayObj);
     this.getListDB();
-    if (localStorage.getItem("savedState")) {
-      this.state = localStorage.getItem("savedState");
-      console.log("STATE LOADED");
+    if (localStorage.getItem('savedState')) {
+      this.state = localStorage.getItem('savedState');
+      console.log('STATE LOADED');
     }
   },
 
   watch: {
     selected: {
-      handler: function () {
-        var self = this;
+      handler() {
+        const self = this;
         this.enteredDate = formatDateInput(this.selected);
-        self.currentList = this.taskList.filter(function (a) {
-          //console.log(self.selected.day);
-          return _parseDate(a.date).day === self.selected.day &&
-            _parseDate(a.date).month === self.selected.month &&
-            _parseDate(a.date).year === self.selected.year;
-        })
+        self.currentList = this.taskList.filter(a =>
+          // console.log(self.selected.day);
+          parseDate(a.due).day === self.selected.day
+            && parseDate(a.due).month === self.selected.month
+            && parseDate(a.due).year === self.selected.year);
       },
-      deep: true
+      deep: true,
     },
     taskList: {
-      handler: function () {
-        var self = this;
-        self.currentList = this.taskList.filter(function (a) {
-          //console.log(self.selected.day);
-          return _parseDate(a.date).day === self.selected.day &&
-            _parseDate(a.date).month === self.selected.month &&
-            _parseDate(a.date).year === self.selected.year;
-        })
+      handler() {
+        const self = this;
+        self.currentList = this.taskList.filter(a =>
+          // console.log(a);
+          parseDate(a.due).day === self.selected.day
+            && parseDate(a.due).month === self.selected.month
+            && parseDate(a.due).year === self.selected.year);
       },
-      deep: true
+      deep: true,
     },
     state: {
-      handler: function () {
+      handler() {
         localStorage.setItem('savedState', this.state);
-        console.log("STATE SAVED");
+        console.log('STATE SAVED');
       },
-      deep: true
-    }
+      deep: true,
+    },
   },
 
   computed: {
     // Returns a matrix of days and weeks of the month [[1,2,3,...],[8,9,10,...],...]
-    getWeeks: function () {
+    getWeeks() {
       // Empty array
-      var weeks = [];
-      // Date object of the first day of the active month
-      var dateObject = new Date(this.activeYear, this.activeMonth, 1);
-      // 0-6 numerical value of the first day of the month
-      var firstWeekday = dateObject.getDay();
-      // Get the month length dynamically so leap years are accounted for
-      var monthLength = new Date(this.activeYear, this.activeMonth + 1, 0).getDate();
-      // Set current day to 1 each time this function is called
-      var currentDay = 1;
+      const weeks = []; // Date object of the first day of the active month
+      const dateObject = new Date(this.activeYear, this.activeMonth, 1); // 0-6 numerical value of the first day of the month
+      const firstWeekday = dateObject.getDay(); // Get the month length dynamically so leap years are accounted for
+      const monthLength = new Date(this.activeYear, this.activeMonth + 1, 0).getDate(); // Set current day to 1 each time this function is called
+      let currentDay = 1;
 
       // Loop through weeks in a month
-      for (var i = 0; i < 6 && currentDay < monthLength + 1; i++) {
+      for (let i = 0; i < 6 && currentDay < monthLength + 1; i++) {
         weeks.push([]);
         if (i === 0) {
           // Loop through days in the first week of the month
-          for (var j = 0; j < 7; j++) {
+          for (let j = 0; j < 7; j++) {
             if (j < firstWeekday) {
               weeks[i].push('');
-            }
-            else {
+            } else {
               weeks[i].push({
                 day: currentDay,
                 month: this.activeMonth,
@@ -127,144 +121,129 @@ var todo = new Vue({
               currentDay++;
             }
           }
-        }
-        else {
+        } else {
           // Loop through days in each other week
-          for (var j = 0; j < 7; j++) {
+          for (let j = 0; j < 7; j++) {
             if (currentDay < monthLength + 1) {
               weeks[i].push({
                 day: currentDay,
                 month: this.activeMonth,
-                year: this.activeYear
+                year: this.activeYear,
               });
               var elem = weeks[i][weeks[i].length - 1];
               elem.todos = this.getTodos(elem);
               currentDay++;
-            }
-            else {
+            } else {
               weeks[i].push('');
             }
-
           }
         }
       }
 
       return weeks;
-    }
+    },
   },
 
   methods: {
-    addNewTask: function () {
+    addNewTask() {
       this.newTask = true;
       if (this.sidebar) this.sidebar = false;
     },
 
-    removeTask: function (task) {
-      var index = this.taskList.indexOf(task);
+    removeTask(task) {
+      const index = this.taskList.indexOf(task);
       this.taskList.splice(index, 1);
     },
 
-    getListDB: function () {
-      var self = this;
-      var request = new XMLHttpRequest();
-      request.open("GET", "todolist.php", true);
-      console.log("GET LIST");
-      request.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          self.taskList = JSON.parse(this.response);
-          self.loaded = true;
-          console.log("GOT LIST");
-          self.database = true;
-        }
-        else {
-          console.log("Database List Not Found");
-          self.database = false;
-          self.loaded = true;
-        }
-
-      };
-      request.send();
+    getListDB() {
+      ajax(`${config.API_URL}/task`, 'GET')
+        .then((res) => {
+          console.log(res.raw);
+          this.taskList = res.parsed.data;
+          this.loaded = true;
+          console.log('GOT LIST');
+          this.database = true;
+        }).catch((res) => {
+          console.log('Database List Not Found');
+          this.database = false;
+          this.loaded = true;
+        });
     },
-    saveListDB: function () {
-      var request = new XMLHttpRequest();
+    saveListDB() {
+      const request = new XMLHttpRequest();
 
       request.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-          if (this.response === "SUCCESS") {
-            alert("Task List Saved");
-          }
-          else {
+          if (this.response === 'SUCCESS') {
+            alert('Task List Saved');
+          } else {
             alert(this.response);
           }
-
         }
       };
       console.log(JSON.stringify(this.taskList));
-      request.open("POST", "savelist.php", true);
+      request.open('POST', 'savelist.php', true);
       request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
       request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.send("data=" + JSON.stringify(this.taskList));
+      request.send(`data=${JSON.stringify(this.taskList)}`);
     },
-    addTask: function () {
-      //Remove whitespace from start and end
-      var task = this.enteredTask.trim();
+    addTask() {
+      // Remove whitespace from start and end
+      const task = this.enteredTask.trim();
 
-      var self = this;
+      const self = this;
 
-      if (_isPast(_parseDate(self.enteredDate)) === false) {
+      if (_isPast(parseDate(self.enteredDate)) === false) {
         if (task) {
-          //Add new a task to the start of the task list
+          // Add new a task to the start of the task list
           this.taskList.push({
             text: task,
             checked: false,
             date: self.enteredDate,
-            id: Date.now()
+            id: Date.now(),
           });
 
-          console.log(this.taskList[this.taskList.length - 1])
+          console.log(this.taskList[this.taskList.length - 1]);
 
-          this.enteredTask = "";
+          this.enteredTask = '';
         }
-      }
-      else {
-        alert("Please pick today or a day in the future.");
+      } else {
+        alert('Please pick today or a day in the future.');
       }
     },
 
-    isPast: function (obj) {
-      return (new Date(obj.year, obj.month, obj.day)).getTime() < (new Date(this.currentYear, this.currentMonth, this.today)).getTime() ? true : false;
+    isPast(obj) {
+      return (new Date(obj.year, obj.month, obj.day)).getTime() < (new Date(this.currentYear, this.currentMonth, this.today)).getTime();
     },
 
-    isState: function (str) {
+    isState(str) {
       return this.state === str;
     },
 
-    closeModal: function () {
+    closeModal() {
       if (this.taskOpen) this.taskOpen = false;
       if (this.newTask) this.newTask = false;
     },
 
-    closeSidebar: function () {
+    closeSidebar() {
       if (this.sidebar) this.sidebar = false;
     },
 
-    toggleSidebar: function () {
+    toggleSidebar() {
       this.sidebar = !this.sidebar;
     },
 
-    toggleState: function () {
-      this.state = this.state === "split" ? "full" : "split";
+    toggleState() {
+      this.state = this.state === 'split' ? 'full' : 'split';
     },
 
-    getTodos: function (obj) {
-      return this.taskList.filter(function (a) {
-        return _parseDate(a.date).day === obj.day &&
-          _parseDate(a.date).month === obj.month &&
-          _parseDate(a.date).year === obj.year;
-      });
+    getTodos(obj) {
+      return this.taskList.filter(a => parseDate(a.due).day === obj.day
+          && parseDate(a.due).month === obj.month
+          && parseDate(a.due).year === obj.year);
     },
 
-    selectDay: function (elem) {
+    selectDay(elem) {
       if (elem > 0) {
         this.selected.day = elem;
         this.selected.month = this.activeMonth;
@@ -272,25 +251,25 @@ var todo = new Vue({
       }
     },
 
-    deselect: function () {
-      for (var key in this.selected) {
+    deselect() {
+      for (const key in this.selected) {
         this.selected[key] = false;
       }
     },
 
-    isToday: function (value) {
+    isToday(value) {
       return this.today === value && this.activeMonth === this.currentMonth && this.activeYear === this.currentYear;
     },
 
-    isSelected: function (value) {
+    isSelected(value) {
       return this.selected.day === value && this.activeMonth === this.selected.month && this.activeYear === this.selected.year;
     },
 
-    formatDate: function (obj) {
-      return _formatDate(obj);
+    formatDate(obj) {
+      return formatDate(obj);
     },
 
-    prevMonth: function () {
+    prevMonth() {
       // jan to dec
       if (this.activeMonth === 0) {
         this.activeMonth = 11;
@@ -300,7 +279,7 @@ var todo = new Vue({
       }
     },
 
-    nextMonth: function () {
+    nextMonth() {
       // dec to jan
       if (this.activeMonth === 11) {
         this.activeMonth = 0;
@@ -310,14 +289,13 @@ var todo = new Vue({
       }
     },
 
-    prevYear: function () {
+    prevYear() {
       this.activeYear--;
     },
 
-    nextYear: function () {
+    nextYear() {
       this.activeYear++;
-    }
-  }
+    },
+  },
 
 });
-

@@ -65,3 +65,33 @@ export function isPast(obj: DateObject): boolean {
 
   return (new Date(obj.year, obj.month, obj.day)).getTime() < (new Date(today.year, today.month, today.day)).getTime() ? true : false;
 }
+
+export function ajax(url: string, method: string, requestBody: object = null) {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 400) {
+        // Success!
+        resolve({
+          raw: xhr.responseText,
+          parsed: JSON.parse(xhr.responseText),
+        });
+      } else {
+        // We reached our target server, but it returned an error
+        reject({
+          raw: xhr.responseText,
+          parsed: JSON.parse(xhr.responseText),
+        });
+      }
+    };
+
+    xhr.open(method, url);
+    
+    if (requestBody) {
+      xhr.setRequestHeader("Content-Type", "application/json");
+    }
+
+    xhr.send(JSON.stringify(requestBody));
+  });
+}
