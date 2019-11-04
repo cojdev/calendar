@@ -1,7 +1,8 @@
+/* eslint-disable max-len */
 import Vue from 'vue';
 import Calendar from './Calendar';
 import {
-  formatDateInput, parseDate, formatDate, ajax,
+  formatDateInput, parseDate, formatDate, ajax, isPast,
 } from './helpers';
 import config from './config';
 /**
@@ -41,6 +42,7 @@ const todo = new Vue({
     enteredTask: '',
     enteredDate: '',
     sidebar: false,
+    formError: '',
     selected: {
       day: date.getDate(),
       month: date.getMonth(),
@@ -63,22 +65,20 @@ const todo = new Vue({
       handler() {
         const self = this;
         this.enteredDate = formatDateInput(this.selected);
-        self.currentList = this.taskList.filter(a =>
-          // console.log(self.selected.day);
+        self.currentList = this.taskList.filter(a => (
           parseDate(a.due).day === self.selected.day
-            && parseDate(a.due).month === self.selected.month
-            && parseDate(a.due).year === self.selected.year);
+          && parseDate(a.due).month === self.selected.month
+          && parseDate(a.due).year === self.selected.year));
       },
       deep: true,
     },
     taskList: {
       handler() {
         const self = this;
-        self.currentList = this.taskList.filter(a =>
-          // console.log(a);
+        self.currentList = this.taskList.filter(a => (
           parseDate(a.due).day === self.selected.day
             && parseDate(a.due).month === self.selected.month
-            && parseDate(a.due).year === self.selected.year);
+            && parseDate(a.due).year === self.selected.year));
       },
       deep: true,
     },
@@ -115,7 +115,7 @@ const todo = new Vue({
                 month: this.activeMonth,
                 year: this.activeYear,
               });
-              var elem = weeks[i][weeks[i].length - 1];
+              const elem = weeks[i][weeks[i].length - 1];
               elem.todos = this.getTodos(elem);
 
               currentDay++;
@@ -130,7 +130,7 @@ const todo = new Vue({
                 month: this.activeMonth,
                 year: this.activeYear,
               });
-              var elem = weeks[i][weeks[i].length - 1];
+              const elem = weeks[i][weeks[i].length - 1];
               elem.todos = this.getTodos(elem);
               currentDay++;
             } else {
@@ -151,8 +151,19 @@ const todo = new Vue({
     },
 
     removeTask(task) {
-      const index = this.taskList.indexOf(task);
-      this.taskList.splice(index, 1);
+      // console.log(task.id);
+      // const index = this.taskList.indexOf(task);
+      // this.taskList.splice(index, 1);
+
+      ajax(`${config.API_URL}/task/${task.id}`, 'DELETE', {
+        description: task,
+        due: this.enteredDate,
+      }).then((res) => {
+        console.log(res);
+        this.getListDB();
+      }).catch((err) => {
+        console.log(err);
+      });
     },
 
     getListDB() {
@@ -163,57 +174,41 @@ const todo = new Vue({
           this.loaded = true;
           console.log('GOT LIST');
           this.database = true;
-        }).catch((res) => {
+        }).catch(() => {
           console.log('Database List Not Found');
           this.database = false;
           this.loaded = true;
         });
     },
-    saveListDB() {
-      const request = new XMLHttpRequest();
 
-      request.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-          if (this.response === 'SUCCESS') {
-            alert('Task List Saved');
-          } else {
-            alert(this.response);
-          }
-        }
-      };
-      console.log(JSON.stringify(this.taskList));
-      request.open('POST', 'savelist.php', true);
-      request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-      request.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-      request.send(`data=${JSON.stringify(this.taskList)}`);
-    },
     addTask() {
       // Remove whitespace from start and end
       const task = this.enteredTask.trim();
+      this.formError = '';
 
-      const self = this;
-
-      if (_isPast(parseDate(self.enteredDate)) === false) {
+      if (!isPast(parseDate(this.enteredDate))) {
+        console.log(this.enteredDate);
         if (task) {
-          // Add new a task to the start of the task list
-          this.taskList.push({
-            text: task,
-            checked: false,
-            date: self.enteredDate,
-            id: Date.now(),
+          ajax(`${config.API_URL}/task`, 'POST', {
+            description: task,
+            due: this.enteredDate,
+          }).then((res) => {
+            console.log(res);
+            this.enteredTask = '';
+            this.getListDB();
+          }).catch((err) => {
+            console.log(err);
           });
-
-          console.log(this.taskList[this.taskList.length - 1]);
-
-          this.enteredTask = '';
         }
       } else {
-        alert('Please pick today or a day in the future.');
+        console.log('Please select a date in the future.');
+        this.formError = 'Please select a date in the future.';
       }
     },
 
     isPast(obj) {
-      return (new Date(obj.year, obj.month, obj.day)).getTime() < (new Date(this.currentYear, this.currentMonth, this.today)).getTime();
+      const objTime = (new Date(obj.year, obj.month, obj.day)).getTime();
+      return objTime + 8.64e+7 - 1 < Date.now();
     },
 
     isState(str) {
@@ -252,17 +247,21 @@ const todo = new Vue({
     },
 
     deselect() {
-      for (const key in this.selected) {
+      this.selected.keys().forEach((key) => {
         this.selected[key] = false;
-      }
+      });
     },
 
     isToday(value) {
-      return this.today === value && this.activeMonth === this.currentMonth && this.activeYear === this.currentYear;
+      return this.today === value
+        && this.activeMonth === this.currentMonth
+        && this.activeYear === this.currentYear;
     },
 
     isSelected(value) {
-      return this.selected.day === value && this.activeMonth === this.selected.month && this.activeYear === this.selected.year;
+      return this.selected.day === value
+        && this.activeMonth === this.selected.month
+        && this.activeYear === this.selected.year;
     },
 
     formatDate(obj) {

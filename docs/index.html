@@ -116,6 +116,7 @@
                             <label for="">Date</label>
                             <input type="date" v-model="enteredDate">
                             <button class="submit-button" @click="addTask">Add task</button>
+                            <div v-if="formError !== ''" class="error">{{formError}}</div>
                         </div>
                         
                         <!-- To Do List -->
@@ -158,16 +159,16 @@
                         <li>
                             <button class="sidebar-button" @click="toggleState">
                                 <template v-if="isState('split')">
-                                    Full View <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+                                    <i class="fa fa-arrows-alt" aria-hidden="true"></i> Full View
                                 </template>
                                 <template v-else>
-                                    Split View <i class="fa fa-columns" aria-hidden="true"></i>
+                                    <i class="fa fa-columns" aria-hidden="true"></i> Split View
                                 </template>
                             </button>
                         </li>
                         <li>
-                            <button class="sidebar-button" @click="saveListDB" v-if="database">
-                                Save to server <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                            <button class="sidebar-button" @click="getListDB" v-if="database">
+                                <i class="fa fa-floppy-o" aria-hidden="true"></i> Refresh list
                             </button>
                         </li>
                     </ul>

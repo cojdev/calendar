@@ -1,22 +1,12 @@
-## Todo API
+# Todo API
 
 ## Endpoints
 
-### Response
+### Get all tasks `GET /task`
+<details>
+<summary>Response</summary>
+<p>
 
-
-### GET `/task` - Get all tasks
-**Response**
-```json
-{
-  "success": "Boolean of response success",
-  "data": "Returned data",
-  "code": "HTTP response code",
-  "message": "Response message"
-}
-```
-### GET `/task/{id}` - Get a single task by id
-**Response**
 ```json
 {
   "success": "Boolean of response success",
@@ -26,8 +16,14 @@
 }
 ```
 
-### POST `/task/add` - Add a task
-**Request**
+</p>
+</details>
+
+### Add task - `POST /task`
+<details>
+<summary>Request</summary>
+<p>
+
 ```json
 {
   "description": "task description",
@@ -36,7 +32,13 @@
 }
 ```
 
-**Response**
+</p>
+</details>
+
+<details>
+<summary>Response</summary>
+<p>
+
 ```json
 {
   "success": "Boolean of response success",
@@ -44,27 +46,75 @@
 }
 ```
 
-### DELETE `/task/{id}`
-```
+</p>
+</details>
+
+
+### Get task by id - `GET /task/:id`
+<details>
+<summary>Response</summary>
+<p>
+
+```json
+{
+  "success": "Boolean of response success",
+  "data": "Returned data",
+  "code": "HTTP response code",
+  "message": "Response message"
+}
 ```
 
-### PATCH `/task/{id}`
+</p>
+</details>
+
+### Edit task by id - `PATCH /task/:id`
+<details>
+<summary>Response</summary>
+<p>
+
+```json
+{
+  "success": "Boolean of response success",
+  "data": "Returned data",
+  "code": "HTTP response code",
+  "message": "Response message"
+}
 ```
+
+</p>
+</details>
+
+### Delete task by id - `DELETE /task/:id`
+<details>
+<summary>Response</summary>
+<p>
+
+```json
+{
+  "success": "Boolean of response success",
+  "data": "Returned data",
+  "code": "HTTP response code",
+  "message": "Response message"
+}
 ```
+
+</p>
+</details>
+
+---
 
 ## Model
 
 ### Task
-
-**Database schema**
+**Schema**
 ```json
 {
   "id": "unique identifier",
   "description": "task description",
-  "completed": "date completed. NULL if not completed",
+  "completed": "date completed. **NULL** if not completed",
   "starred": "Int. highlighted tasks",
   "created": "date created",
   "modified": "date edited",
   "due": "due date"
 }
-```
+  ```

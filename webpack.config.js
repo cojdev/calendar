@@ -8,19 +8,22 @@ module.exports = {
       {
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/
-      }
-    ]
+        exclude: /node_modules/,
+      },
+    ],
   },
   resolve: {
     extensions: ['.tsx', '.ts', '.js'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js' // 'vue/dist/vue.common.js' for webpack 1
-    }
+      vue$: 'vue/dist/vue.esm.js',
+    },
   },
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'docs/js'),
     publicPath: 'docs/js',
-  }
+  },
+  devServer: {
+    open: true,
+  },
 };
