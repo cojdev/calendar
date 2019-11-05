@@ -102,10 +102,19 @@ $app->post('/task', function ($request, $response, $args) {
 // edit task
 $app->patch('/task/{id}', function ($request, $response, $args) {
   $body = $request->getParsedBody();
+  // die(print_r($body, true));
 
   // convert to sql datetime
-  $body['due'] = strtotime($body['due']);
-  $body['due'] = date('Y-m-d H:i:s', $body['due']);
+  if ($body['due']) {
+    $body['due'] = strtotime($body['due']);
+    $body['due'] = date('Y-m-d H:i:s', $body['due']);
+  }
+
+  if ($body['completed'] && $body['completed'] !== null) {
+    $body['completed'] = strtotime($body['completed']);
+    $body['completed'] = date('Y-m-d H:i:s', $body['completed']);
+  }
+  // die(print_r($body, true));
 
   $model = new Task($this->db);
   $ret = $model->edit($args['id'], $body);

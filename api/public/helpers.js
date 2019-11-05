@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 function ajax(url, method, requestBody = null) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
@@ -19,9 +20,13 @@ function ajax(url, method, requestBody = null) {
     };
 
     xhr.open(method, url);
-    
-    if (['POST', 'PUT'].includes(method)) {
-      xhr.setRequestHeader("Content-Type", "application/json");
+
+
+    console.log(method);
+
+    if (['POST', 'PATCH'].includes(method)) {
+      console.log(method);
+      xhr.setRequestHeader('Content-Type', 'application/json');
     }
 
     xhr.send(JSON.stringify(requestBody));

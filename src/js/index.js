@@ -1,27 +1,28 @@
 /* eslint-disable max-len */
 import Vue from 'vue';
-import Calendar from './Calendar';
+
+// Components
+import './components/Calendar';
+
+import cal from './cal';
 import {
   formatDateInput, parseDate, formatDate, ajax, isPast,
 } from './helpers';
 import config from './config';
-/**
- * Application
- */
 
-// var cal = new Calendar();
 const date = new Date();
 
 /**
  * Main Vue instance
  */
+// eslint-disable-next-line no-unused-vars
 const todo = new Vue({
 
   el: '#app',
 
   data: {
-    weekdayNames: Calendar.days.map(a => a.slice(0, 3)),
-    monthNames: Calendar.months,
+    weekdayNames: cal.days.map(a => a.slice(0, 3)),
+    monthNames: cal.months,
     currentYear: date.getFullYear(),
     currentMonth: date.getMonth(),
     today: date.getDate(),
@@ -92,7 +93,7 @@ const todo = new Vue({
   },
 
   computed: {
-    // Returns a matrix of days and weeks of the month [[1,2,3,...],[8,9,10,...],...]
+    // Returns a matrix of days and weeks of the month [[1,2,...],[8,9,...],...]
     getWeeks() {
       // Empty array
       const weeks = []; // Date object of the first day of the active month
@@ -150,44 +151,12 @@ const todo = new Vue({
       if (this.sidebar) this.sidebar = false;
     },
 
-    removeTask(task) {
-      // console.log(task.id);
-      // const index = this.taskList.indexOf(task);
-      // this.taskList.splice(index, 1);
-
-      ajax(`${config.API_URL}/task/${task.id}`, 'DELETE', {
-        description: task,
-        due: this.enteredDate,
-      }).then((res) => {
-        console.log(res);
-        this.getListDB();
-      }).catch((err) => {
-        console.log(err);
-      });
-    },
-
-    getListDB() {
-      ajax(`${config.API_URL}/task`, 'GET')
-        .then((res) => {
-          console.log(res.raw);
-          this.taskList = res.parsed.data;
-          this.loaded = true;
-          console.log('GOT LIST');
-          this.database = true;
-        }).catch(() => {
-          console.log('Database List Not Found');
-          this.database = false;
-          this.loaded = true;
-        });
-    },
-
     addTask() {
-      // Remove whitespace from start and end
       const task = this.enteredTask.trim();
       this.formError = '';
 
       if (!isPast(parseDate(this.enteredDate))) {
-        console.log(this.enteredDate);
+        console.log(task);
         if (task) {
           ajax(`${config.API_URL}/task`, 'POST', {
             description: task,
@@ -201,9 +170,47 @@ const todo = new Vue({
           });
         }
       } else {
-        console.log('Please select a date in the future.');
         this.formError = 'Please select a date in the future.';
       }
+    },
+
+    completeTask(task) {
+      task.completed = task.completed !== null ? null : formatDateInput(this.todayObj);
+
+      ajax(`${config.API_URL}/task/${task.id}`, 'PATCH', Object.assign(task, {
+        completed: task.completed,
+      })).then((res) => {
+        console.log(res);
+        this.getListDB();
+      }).catch((err) => {
+        console.log(err);
+      });
+    },
+
+    removeTask(task) {
+      ajax(`${config.API_URL}/task/${task.id}`, 'DELETE')
+        .then((res) => {
+          console.log(res);
+          this.getListDB();
+        }).catch((err) => {
+          console.log(err);
+        });
+    },
+
+    getListDB() {
+      ajax(`${config.API_URL}/task`, 'GET')
+        .then((res) => {
+          this.taskList = res.parsed.data;
+          // this.taskList.forEach((item) => {
+          // });
+          this.loaded = true;
+          console.log('GOT LIST');
+          this.database = true;
+        }).catch(() => {
+          console.log('Database List Not Found');
+          this.database = false;
+          this.loaded = true;
+        });
     },
 
     isPast(obj) {

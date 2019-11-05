@@ -1,4 +1,4 @@
-import Calendar from "./Calendar";
+import cal from "./cal";
 
 interface DateObject {
   day: number,
@@ -41,7 +41,7 @@ export function ordinalSuffix(num: number): string {
  */
 export function formatDate(obj: DateObject): string {
   var dateObject = new Date(obj.year, obj.month, obj.day);
-  return Calendar.days[dateObject.getDay()] + " " + obj.day + ordinalSuffix(obj.day) + " " + Calendar.months[obj.month] + ", " + obj.year;
+  return cal.days[dateObject.getDay()] + " " + obj.day + ordinalSuffix(obj.day) + " " + cal.months[obj.month] + ", " + obj.year;
 }
 
 /**
@@ -89,6 +89,7 @@ export function ajax(url: string, method: string, requestBody: object = null) {
     xhr.open(method, url);
     
     if (requestBody) {
+      console.log(requestBody);
       xhr.setRequestHeader("Content-Type", "application/json");
     }
 

@@ -37,21 +37,17 @@
       <input type="text" name="id" id="id">
 
       <label for="resquet-body">request body</label>
-      <textarea name="request-body" id="request-body" cols="50" rows="6">
-{
+      <textarea name="request-body" id="request-body" cols="50" rows="6">{
   "description": "what needs to be done",
   "due": "2019-12-25",
   "starred": false
-}
-      </textarea>
+}</textarea>
 
       <button type="submit">Send</button><br>
 
       <label for="response">response</label>
       <output id="response">
-        <pre>
-// response
-        </pre>
+        <pre>// response</pre>
       </output>
     </form>
   </main>
@@ -60,7 +56,11 @@
   <script src="helpers.js"></script>
   <script>
     const qs = (selector, element = document) => element.querySelector(selector);
-    const form = document.querySelector('form');
+
+    const form = qs('form');
+    const endpoint = qs('#endpoint');
+
+
     form.addEventListener('submit', e => {
       e.preventDefault();
       const elem = e.currentTarget;

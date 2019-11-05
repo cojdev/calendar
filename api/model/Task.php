@@ -1,8 +1,6 @@
 <?php
 
-class Task
-{
-
+class Task {
   private $db;
 
   function __construct($connection) {
@@ -144,17 +142,19 @@ class Task
       $result = $this->db->prepare(
         "UPDATE
           Task
-      SET
-        description=?,
-        starred=?,
-        due=?,
-        modified=NOW()
-      WHERE
-        id=?"
+        SET
+          description=?,
+          completed=?,
+          starred=?,
+          due=?,
+          modified=NOW()
+        WHERE
+          id=?"
       );
       
       $result->execute([
         $data['description'],
+        $data['completed'],
         $data['starred'],
         $data['due'],
         $id,
@@ -164,8 +164,7 @@ class Task
         return [
           'success' => true,
           'message' => 'Task modifed',
-          'id' => $id[0],
-          
+          'id' => $id,
         ];
       }
 
@@ -198,7 +197,7 @@ class Task
         return [
           'success' => true,
           'message' => 'Task deleted',
-          'id' => $id[0],
+          'id' => $id,
         ];
       }
 
