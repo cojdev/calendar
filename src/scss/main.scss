@@ -1,4 +1,5 @@
 @import 'vars';
+@import 'vue';
 @import 'helpers';
 @import 'base';
 @import 'calendar';
@@ -15,10 +16,6 @@ body {
     background-size: cover;
     background-attachment: fixed;
     margin: 0;
-}
-
-[v-cloak] {
-    display: none !important;
 }
 
 .mobile-only {
