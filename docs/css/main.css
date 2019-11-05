@@ -1,3 +1,6 @@
+[v-cloak] {
+  display: none !important; }
+
 *, *::before, *::after {
   box-sizing: border-box; }
 
@@ -82,7 +85,7 @@
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   position: absolute;
   top: .5rem;
@@ -113,7 +116,7 @@
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   position: absolute;
   top: 2px;
@@ -295,7 +298,7 @@
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   right: 2px;
   top: 2px;
@@ -318,7 +321,7 @@
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   color: #888;
   height: 1.5rem;
@@ -345,16 +348,13 @@
 html {
   font-size: 18px;
   font-weight: 400;
-  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
   color: #333; }
 
 body {
   background-size: cover;
   background-attachment: fixed;
   margin: 0; }
-
-[v-cloak] {
-  display: none !important; }
 
 @media screen and (min-width: 878px) {
   .mobile-only {
@@ -397,7 +397,7 @@ body {
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   display: block;
   width: 100%;
@@ -465,7 +465,7 @@ body {
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   background: transparent;
   position: absolute;
@@ -522,7 +522,7 @@ body {
     color: #555;
     border-radius: 4px;
     background-color: transparent;
-    font-family: "Lato", "Segoe UI", Helvetica, sans-serif;
+    font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
     transition: 150ms ease;
     font-size: .9rem;
     color: #555;
