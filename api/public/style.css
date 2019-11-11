@@ -14,7 +14,7 @@ body {
 
 main {
   margin: 0 auto;
-  max-width: 600px;
+  max-width: 1200px;
 }
 
 label {
@@ -55,11 +55,13 @@ button {
 }
 
 output {
-  height: 300px;
+  max-height: 300px;
   display: block;
   overflow: auto;
   background-color: #667;
   border-radius: 4px;
+  padding: 1ch;
+  border: 1px solid #556;
 }
 
 pre {
@@ -69,7 +71,7 @@ pre {
   color: #fff;
   font-size: 12px;
   max-height: 500px;
-  padding: 1ch;
+  padding: 0;
   text-shadow: 1px 2px 2px rgba(0,0,0,0.2);
 }
 
@@ -84,3 +86,19 @@ pre {
   margin: .5rem;
   flex-grow: 1;
 }
+
+.w-1 { width: calc(100% * 1/12 - 1rem); }
+.w-2 { width: calc(100% * 2/12 - 1rem); }
+.w-3 { width: calc(100% * 3/12 - 1rem); }
+.w-4 { width: calc(100% * 4/12 - 1rem); }
+.w-5 { width: calc(100% * 5/12 - 1rem); }
+.w-6 { width: calc(100% * 6/12 - 1rem); }
+.w-7 { width: calc(100% * 7/12 - 1rem); }
+.w-8 { width: calc(100% * 8/12 - 1rem); }
+.w-9 { width: calc(100% * 9/12 - 1rem); }
+.w-10 { width: calc(100% * 10/12 - 1rem); }
+.w-11 { width: calc(100% * 11/12 - 1rem); }
+.w-12 { width: calc(100% * 12/12 - 1rem); }
+
+.fb-0 { flex-basis: 0; }
+.fg-0 { flex-grow: 0; }

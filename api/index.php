@@ -64,17 +64,28 @@ $app->get('/', function (Request $request, Response $response, array $args) {
 });
 
 // get tasks
-$app->get('/task[/[{id}]]', function ($request, $response, $args) {
+$app->get('/task', function ($request, $response, $args) {
   $model = new Task($this->db);
+  $params = $request->getQueryParams();
 
-  // get single task by id
-  if ($args['id']) {
-    $ret = $model->get($args['id']);
-  // get all tasks
-  } else {
-    $ret = $model->getAll();
+  $ret = $model->getAll($params);
+
+  if (!$ret['success']) {
+    $ret = [
+      "code" => $ret['code'],
+      "message" => $ret['message'],
+    ];
   }
 
+  return $response->withJson($ret, $ret['code'] ?: 200);
+});
+
+// get single task
+$app->get('/task/{id}', function ($request, $response, $args) {
+  $model = new Task($this->db);
+  $ret = $model->get($args['id']);
+
+  // get all tasks
   if (!$ret['success']) {
     $ret = [
       "code" => $ret['code'],

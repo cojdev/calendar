@@ -7,15 +7,28 @@ class Task {
     $this->db = $connection;
   }
 
-  function getAll($limit = 20) {
+  function getAll($params) {
     try {
-      $query = $this->db->query("SELECT * FROM Task ORDER BY Task.created DESC LIMIT $limit");
+      // parameters
+      $limit = isset($params['limit']) ? ' LIMIT ' . $params['limit'] : '';
+      $sort = isset($params['sort']) ? ' ORDER BY Task.created ' . $params['sort'] : ' ORDER BY Task.created DESC';
+      
+      // where clauses
+      $whereClauses = [];
+      isset($params['date']) ? $whereClauses[] = 'due="'.$params['date'].'"' : null;
+      isset($params['starred']) ? $whereClauses[] = 'starred="'.$params['starred'].'"' : null;
+      isset($params['completed']) ? $whereClauses[] = ($params['completed']'completed<>"0"') : null;
+      $whereSql = count($whereClauses) ? ' WHERE ' . implode('', $whereClauses) : '';
+
+      $query = $this->db->query("SELECT * FROM Task$whereSql$sort$limit");
       $result = $query->fetchAll(PDO::FETCH_ASSOC);
 
       if ($result) {
         return [
           'success' => true,
+          'count' => count($result),
           'data' => $result,
+          'params' => $params,
         ];
       }
 

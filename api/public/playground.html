@@ -14,71 +14,52 @@
     <h1>API Endpoint Playground</h1>
     <form>
       <div class="row">
-        <div class="column">
-          <label for="endpoint">endpoint</label>
-          <select name="endpoint" id="endpoint">
-            <option value="/task">/task</option>
-            <option value="/task/[id]">/task/[id]</option>
-          </select>
-        </div>
+        <div class="column w-7 fg-0">
+          <div class="row fb-0">
+            <div class="column">
+              <label for="endpoint">endpoint</label>
+              <select name="endpoint" id="endpoint">
+              </select>
+            </div>
 
-        <div class="column">
-          <label for="method">method</label>
-          <select name="method" id="method">
-            <option value="GET">GET</option>
-            <option value="POST">POST</option>
-            <option value="PATCH">PATCH</option>
-            <option value="DELETE">DELETE</option>
-          </select>
+            <div class="column">
+              <label for="method">method</label>
+              <select name="method" id="method">
+                <option value="GET">GET</option>
+                <option value="POST">POST</option>
+                <option value="PATCH">PATCH</option>
+                <option value="DELETE">DELETE</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid" id="parameters">
+          </div>
+
+          <label for="id">id</label>
+          <input type="text" name="id" id="id">
+
+          <label for="resquet-body">request body</label>
+          <textarea name="request-body" id="request-body" cols="50" rows="6"></textarea>
+
+          <button type="submit">Send</button><br>
+        </div>
+        <div class="column w-5 fg-0">
+          <label for="response">response</label>
+          <output id="response">
+            <pre>// response</pre>
+          </output>
         </div>
       </div>
 
-      <label for="id">id</label>
-      <input type="text" name="id" id="id">
 
-      <label for="resquet-body">request body</label>
-      <textarea name="request-body" id="request-body" cols="50" rows="6">{
-  "description": "what needs to be done",
-  "due": "2019-12-25",
-  "starred": false
-}</textarea>
 
-      <button type="submit">Send</button><br>
-
-      <label for="response">response</label>
-      <output id="response">
-        <pre>// response</pre>
-      </output>
     </form>
   </main>
 
 
   <script src="helpers.js"></script>
-  <script>
-    const qs = (selector, element = document) => element.querySelector(selector);
-
-    const form = qs('form');
-    const endpoint = qs('#endpoint');
-
-
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const elem = e.currentTarget;
-      const url = `${qs('#endpoint').value.replace('[id]', qs('#id').value)}`;
-      const body = JSON.parse(qs('#request-body').value);
-      console.log(body);
-
-      ajax(url, qs('#method').value, body)
-        .then(data => {
-          console.log(data.parsed);
-          qs('#response pre').innerHTML = `${JSON.stringify(data.parsed, null, 2)}`;
-        })
-        .catch(data => {
-          console.log(data.parsed);
-          qs('#response pre').innerHTML = `${JSON.stringify(data.parsed, null, 2)}`;
-        });
-    });
-  </script>
+  <script src="script.js"></script>
 </body>
 
 </html>
