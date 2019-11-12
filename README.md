@@ -32,6 +32,13 @@ There are 2 views, “Full” and “Split”. “Full” has the calendar filli
 
 ### Setup
 
+```sh
+# enter api directory
+cd api
+# start docker container
+docker-compose up --build
+```
+
 #### Access docker database
 ```
 

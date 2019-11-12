@@ -9,13 +9,17 @@ require_once 'vendor/autoload.php';
 
 session_start();
 
+// Environment Variables in .env file
+$dotenv = Dotenv\Dotenv::create(__DIR__);
+$dotenv->load();
+
 // Configuration
 $config = [
   'db' => [
-    'host'   => '192.168.99.100:3320',
-    'user'   => 'user',
-    'pass'   => 'pass',
-    'dbname' => 'todoapp'
+    'host'   => getenv('DB_HOST'),
+    'user'   => getenv('DB_USER'),
+    'pass'   => getenv('DB_PASS'),
+    'dbname' => getenv('DB_NAME'),
   ],
   'displayErrorDetails' => true,
 ];
@@ -35,6 +39,7 @@ $container['db'] = function ($c) {
 
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   } catch (PDOException $e) {
+    echo 'Caught PDOException: ';
     die($e->getMessage());
   }
 

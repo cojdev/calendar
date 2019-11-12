@@ -11,7 +11,8 @@ RUN apt-get update && apt-get install nano git unzip -y
 
 RUN cd /var/www/html \
     && composer require slim/slim "^3.12" \
-    && composer require slim/psr7
+    && composer require slim/psr7 \
+    && composer install
 
 # enable mod_rewrite
 RUN a2enmod rewrite 

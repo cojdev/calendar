@@ -46,6 +46,9 @@
         &.task-checked {
             background-color: #aaa;
         }
+        &.task-starred {
+            background-color: #e14;
+        }
     }
 }
 
@@ -203,6 +206,9 @@
         margin-right: 2px;
         &.task-checked {
             background-color: #888;
+        }
+        &.task-starred {
+            background-color: #e14;
         }
     }
 }

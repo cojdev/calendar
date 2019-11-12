@@ -1,2 +1,6 @@
+# Frontend
 node_modules
+
+# Backend
 api/vendor
+api/.env

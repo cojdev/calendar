@@ -1,3 +1,3 @@
 export default {
-  API_URL: 'http://docker.local:1080',
+  API_URL: 'http://localhost:4001',
 };

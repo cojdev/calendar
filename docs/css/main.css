@@ -49,6 +49,8 @@
     margin-top: 2px; }
     .calendar-list li.task-checked {
       background-color: #aaa; }
+    .calendar-list li.task-starred {
+      background-color: #e14; }
 
 @media screen and (max-width: 640px) {
   .calendar-split table {
@@ -196,6 +198,8 @@
     margin-right: 2px; }
     .calendar-dots li.task-checked {
       background-color: #888; }
+    .calendar-dots li.task-starred {
+      background-color: #e14; }
 
 .calendar-weekdays {
   background: #fff;

@@ -82,9 +82,9 @@
                           <ul :class="{'calendar-dots': isState('split'), 'calendar-list': isState('full')}"
                             v-if="day.todos.length > 0 && day.day">
                             <div style="min-width: 7rem">
-                              <li v-for="task in day.todos" :class="{'task-checked': task.completed !== null}">
+                              <li v-for="task in day.todos" :class="{'task-checked': task.completed !== null, 'task-starred': task.starred === '1'}">
                                 <template v-if="isState('full')">
-                                  {{ task.description }}
+                                  {{ task.description }} ({{ task.starred }})
                                 </template>
                               </li>
                             </div>
@@ -126,7 +126,7 @@
                 <ul>
                   <li v-for="task in currentList">
                     <input type="checkbox" :checked="task.completed !== null" @input="completeTask(task)">
-                    <span :class="{checked: task.completed !== null}">{{ task.description }}</span>
+                    <span :class="{'task-checked': task.completed !== null, 'task-starred': task.starred === '1'}">{{ task.description }} ({{ task.starred }})</span>
                     <div class="task-buttons">
                       <button class="delete-button" @click="removeTask(task)"><i class="fa fa-times"
                           aria-hidden="true"></i></button>

@@ -17,7 +17,7 @@ gulp.task('sass', () => gulp.src(`${src}/scss/**/main.scss`)
 
 // Watch edits
 gulp.task('watch', () => {
-  gulp.watch(`${src}/**/*.scss`, ['sass']);
+  gulp.watch(`${src}/**/*.scss`, gulp.series('sass'));
 });
 
 // Default task
