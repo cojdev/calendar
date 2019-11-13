@@ -17,7 +17,7 @@ class Task {
       $whereClauses = [];
       isset($params['date']) ? $whereClauses[] = 'due="'.$params['date'].'"' : null;
       isset($params['starred']) ? $whereClauses[] = 'starred="'.$params['starred'].'"' : null;
-      isset($params['completed']) ? $whereClauses[] = ($params['completed'] === 0 ? 'completed IS NULL' : 'completed IS NOT NULL') : null;
+      isset($params['completed']) ? $whereClauses[] = ((int)$params['completed'] === 0 ? 'completed IS NULL' : 'completed IS NOT NULL') : null;
       $whereSql = count($whereClauses) ? ' WHERE ' . implode('', $whereClauses) : '';
 
       $query = $this->db->query("SELECT * FROM Task$whereSql$sort$limit");
