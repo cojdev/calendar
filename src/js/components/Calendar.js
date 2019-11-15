@@ -1,10 +1,10 @@
 import Vue from 'vue';
 
-Vue.component('button-counter', {
+Vue.component('calendar', {
   data() {
     return {
       count: 0,
     };
   },
-  template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>',
+  template: '#calendar',
 });

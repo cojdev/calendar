@@ -2,7 +2,9 @@
 import Vue from 'vue';
 
 // Components
-import './components/Calendar';
+import './components/CalendarHead';
+import './components/CalendarTable';
+import './components/Modal';
 
 import cal from './cal';
 import {
@@ -57,7 +59,7 @@ const todo = new Vue({
     this.getListDB();
     if (localStorage.getItem('savedState')) {
       this.state = localStorage.getItem('savedState');
-      console.log('STATE LOADED');
+      console.log('local storage loaded');
     }
   },
 
@@ -149,6 +151,10 @@ const todo = new Vue({
     addNewTask() {
       this.newTask = true;
       if (this.sidebar) this.sidebar = false;
+    },
+
+    getListLS() {
+
     },
 
     addTask() {

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="x-ua-compatible" content="ie=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="author" content="Charles Ojukwu">
+  <meta name="description" content="A Calendar To-Do App">
+  <meta name="keywords" content="">
+  <title>Calendar To-Do App</title>
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,500,600" rel="stylesheet">
+  <link rel="stylesheet" href="assets/inter/inter.css">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+
+<body>
+  <!-- Vue App -->
+  <div id="app" class="app">
+    <template v-if="loaded">
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <h1>Calendar To-Do App</h1>
+        <button class="menu-button mobile-only" @click="toggleSidebar">
+          <template v-if="!sidebar">
+            Menu <i class="fa fa-bars" aria-hidden="true"></i>
+          </template>
+          <template v-else>
+            Close <i class="fa fa-times" aria-hidden="true"></i>
+          </template>
+
+        </button>
+      </div>
+
+      <div class="wrap" v-cloak>
+        <div class="sidebar-clear" :class="{'sidebar-clear-open': sidebar || newTask}" @click="closeSidebar">
+        </div>
+
+        <!-- Window -->
+        <div class="window">
+          <div class="row">
+
+            <!-- Calendar -->
+            <div :class="{'calendar-split': isState('split'), 'calendar-full': isState('full')}">
+              <!-- Calendar Head -->
+              <calendar-head
+                :month="monthNames[activeMonth]"
+                :year="activeYear"
+                @next-month="nextMonth()"
+                @next-year="nextYear()"
+                @prev-month="prevMonth()"
+                @prev-year="prevYear()"
+                ></calendar-head>
+
+              <!-- Calendar Table -->
+              <calendar-table
+                :weeks="getWeeks"
+                :day-names="weekdayNames"
+                :is-today="isToday"
+                :is-selected="isSelected"
+                :is-state="isState"
+                :select-day="selectDay"
+                @open-task="taskOpen = true"
+                ></calendar-table>
+            </div>
+
+            <!-- To Do List -->
+            <div :class="{todo: isState('split'), 'todo-modal': isState('full')}" v-if="taskOpen || isState('split')">
+              <button class="close-button" @click="closeModal" v-if="isState('full')"><i class="fa fa-times"
+                  aria-hidden="true"></i></button>
+              <div class="todo-date">{{ formatDate(selected) }}</div>
+              <label for=""></label>
+              <input type="text" placeholder="Add a new task" v-if="!isPast(selected)" v-model="enteredTask"
+                @keyup.enter="addTask">
+              <button class="submit-button" @click="addTask" v-if="!isPast(selected)">Add task</button>
+              <template v-if="currentList.length !== 0">
+                <ul>
+                  <li v-for="task in currentList">
+                    <input type="checkbox" :checked="task.completed !== null" @input="completeTask(task)">
+                    <span :class="{'task-checked': task.completed !== null, 'task-starred': task.starred === '1'}">{{ task.description }} ({{ task.starred }})</span>
+                    <div class="task-buttons">
+                      <button class="delete-button" @click="removeTask(task)"><i class="fa fa-times"
+                          aria-hidden="true"></i></button>
+                    </div>
+
+                  </li>
+                </ul>
+              </template>
+              <template v-else>
+                <p>You have no tasks</p>
+              </template>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sidebar -->
+        <sidebar></sidebar>
+
+      <!-- Modals -->
+      <modal
+      @close-modal="closeModal"
+      @add-task="addTask"
+      :modal-open="(taskOpen && isState('full')) || newTask"
+      :new-task="newTask"
+      :form-error="formError"
+      v-model="enteredTask"
+      v-model="enteredDate"
+      ></modal>
+    </template>
+    <template v-else>
+      <div class="loader"></div>
+    </template>
+
+  </div>
+
+  <!-- <script src="js/vue.min.js"></script> -->
+  <script src="js/bundle.js"></script>
+</body>
+
+</html>

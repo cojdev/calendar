@@ -69,6 +69,7 @@ export function isPast(obj: DateObject): boolean {
 export function ajax(url: string, method: string, requestBody: object = null) {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
+    // xhr.timeout = 5000;
 
     xhr.onload = () => {
       if (xhr.status >= 200 && xhr.status < 400) {
