@@ -1,208 +1,101 @@
 @import 'vars';
 @import 'vue';
-@import 'helpers';
+@import 'mixins';
 @import 'base';
-@import 'calendar';
-@import 'todo';
+@import 'animations';
 
-html {
-    font-size: 18px;
-    font-weight: 400;
-    font-family: $font-family;
-    color: #333;
-}
-
-body {
-    background-size: cover;
-    background-attachment: fixed;
-    margin: 0;
-}
+// components
+@import 'components/sidebar';
+@import 'components/calendar';
+@import 'components/todo';
 
 .mobile-only {
-    @media screen and (min-width: $br-sidebar) {
-        display: none !important;
-    }
+  @media screen and (min-width: $br-sidebar) {
+    display: none !important;
+  }
 }
 
 .checked {
-    color: #aaa;
-    text-decoration: line-through;
+  color: #aaa;
+  text-decoration: line-through;
 }
 
 .new-task {
-    @include modal;
-    padding: 1rem;
-    input {
-        outline: none;
-        display: block;
-        padding: .5rem;
-        font-size: 18px;
-        color: #333;
-        border: 2px solid $line-colour;
-        width: 100%;
-        margin-bottom: 1rem;
-    } 
+  @include modal;
+  padding: 1rem;
+
+  input {
+    outline: none;
+    display: block;
+    padding: .5rem;
+    font-size: 18px;
+    color: #333;
+    border: 2px solid $line-colour;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
 }
 
 .submit-button {
-    @include button;
-    display: block;
-    width: 100%;
-    height: 2rem;
-    border: 1px solid #eee;
+  @include button;
+  display: block;
+  width: 100%;
+  height: 2rem;
+  border: 1px solid #eee;
 }
 
 .loader {
-    display: flex;
-    background: #fff;
-	height: 100vh;
-	width: 100%;
-	&::after {
-		margin: auto;
-		content: "";
-		display: block;
-		height: 80px;
-		width: 80px;
-		border: 10px solid #eee;
-		border-left-color: $primary;
-		border-radius: 50%;
-		animation: spin linear infinite 600ms;
-	}
-}
+  display: flex;
+  background: #fff;
+  height: 100vh;
+  width: 100%;
 
-@keyframes spin {
-	0% {
-		transform: rotate(0deg);
-	}
-	100% {
-		transform: rotate(360deg);
-	}
+  &::after {
+    margin: auto;
+    content: "";
+    display: block;
+    height: 80px;
+    width: 80px;
+    border: 10px solid #eee;
+    border-left-color: $primary;
+    border-radius: 50%;
+    animation: spin linear infinite 600ms;
+  }
 }
 
 .app {
-    margin: 0;
-    text-align: center;
-    width: 100vw;
-    overflow-x: hidden;
-    position: relative;
-}
-
-.toolbar {
-    background: #f8f8f8;
-    height: $toolbar-height;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 8;
-    font-size: .9rem;
-    padding: 0 0 0 1rem;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-    h1 {
-        font-size: .9rem;
-        line-height: 2rem;
-        font-weight: 600;
-        margin: 0;
-        display: inline;
-    }
-}
-
-.menu-button {
-    @include button;
-    background: transparent;
-    position: absolute;
-    right: 0;
-    top: 0;
-    color: #888;
-    border-radius: 0;
-    padding: 0 .5rem;
-    height: $toolbar-height;
-    transition: 150ms ease;
-    &:hover {
-        background: rgba(#000, 0.1);
-    }
-    &:active {
-        background: rgba(#000, 0.2);
-        box-shadow: inset 0 2px 10px rgba(#000,0.25);
-    }
+  margin: 0;
+  text-align: center;
+  width: 100vw;
+  overflow-x: hidden;
+  position: relative;
 }
 
 .wrap {
-    margin-top: $toolbar-height;
-    display: flex;
-    @media screen and (max-width: $sm) {
-        display: block;
-    }
+  display: flex;
+
+  @media screen and (max-width: $sm) {
+    display: block;
+  }
 }
 
 .window {
-    overflow: hidden;
-    height: calc(100vh - #{$toolbar-height});
-    width: calc(100% - #{$sidebar-width});
-    @media screen and (max-width: $break) {
-        width: 100%;
-        overflow-y: auto;
-    }
-}
+  overflow: hidden;
+  height: 100vh;
+  width: calc(100% - #{$sidebar-width});
 
-.sidebar {
-    width: $sidebar-width;
-    min-height: 300px;
-    padding: .5rem;
-    background: #f8f8f8;
-    border-left: 1px solid #ddd;
-    ul {
-        @include ul;
-    }
-    button {
-        @include button;
-        font-size: .9rem;
-        color: #555;
-        width: 100%;
-        padding: .5rem;
-        margin-bottom: .5rem;
-        text-align: left;
-        border-radius: $border-radius;
-    }
-    @media screen and (max-width: $break) {
-        position: absolute;
-        z-index: 10;
-        right:0;
-        transform: translateX(100%);
-        width: 100%;
-        max-width: $sidebar_width;
-        top: $toolbar-height;
-        transition: $transition-2;
-        border: 1px solid #ddd;
-        border-top-width: 0;
-        box-shadow: $shadow-2;
-        &-open {
-            transform: translateX(0);
-        }
-    }
-}
-
-.sidebar-clear {
-    @media screen and (max-width: $br-sidebar) {
-        
-        @include overlay;
-        z-index: 5;
-        opacity: 0;
-        visibility: hidden;
-        transition: $transition-2;
-        &-open {
-            opacity: 1;
-            visibility: visible;
-        }
-    }
-    
+  @media screen and (max-width: $break) {
+    width: 100%;
+    overflow-y: auto;
+  }
 }
 
 .row {
-    display: flex;
-    background: #ddd;
-    min-height: 100%;
-    @media screen and (max-width: $sm) {
-        display: block;
-    }
+  display: flex;
+  background: #ddd;
+  min-height: 100%;
+
+  @media screen and (max-width: $sm) {
+    display: block;
+  }
 }

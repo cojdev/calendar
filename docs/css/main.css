@@ -4,6 +4,72 @@
 *, *::before, *::after {
   box-sizing: border-box; }
 
+html {
+  font-size: 16px;
+  font-weight: 400;
+  font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
+  color: #333; }
+
+body {
+  background-size: cover;
+  background-attachment: fixed;
+  margin: 0; }
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg); }
+  100% {
+    transform: rotate(360deg); } }
+
+.sidebar {
+  width: 300px;
+  position: relative;
+  min-height: 300px;
+  padding: .5rem;
+  background: #f8f8f8; }
+  .sidebar__list {
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+  .sidebar__button {
+    display: inline-block;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    color: #555;
+    border-radius: 4px;
+    background-color: transparent;
+    font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
+    transition: 150ms ease;
+    font-size: .9rem;
+    color: #555;
+    width: 100%;
+    padding: .5rem;
+    margin-bottom: .5rem;
+    text-align: left;
+    border-radius: 4px; }
+    .sidebar__button:hover {
+      background: rgba(0, 0, 0, 0.05); }
+    .sidebar__button:active {
+      background: rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
+  @media screen and (max-width: 878px) {
+    .sidebar {
+      position: absolute;
+      z-index: 10;
+      right: 0;
+      transform: translateX(100%);
+      width: 100%;
+      max-width: 300px;
+      top: 2rem;
+      transition: 300ms ease;
+      border: 1px solid #ddd;
+      border-top-width: 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+      .sidebar-open {
+        transform: translateX(0); } }
+
 .calendar-full {
   width: 100%;
   height: calc(100vh - 2rem);
@@ -45,7 +111,7 @@
     margin: 0;
     color: #fff;
     font-weight: 400;
-    background: #28f;
+    background: MEDIUMSEAGREEN;
     margin-top: 2px; }
     .calendar-list li.task-checked {
       background-color: #aaa; }
@@ -69,7 +135,7 @@
       height: 4rem; } }
 
 .calendar-head {
-  background: linear-gradient(100deg, #55a3ff, #28f);
+  background: linear-gradient(100deg, #5ac88b, MEDIUMSEAGREEN);
   color: #fff;
   position: relative;
   height: 3rem;
@@ -87,7 +153,7 @@
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   position: absolute;
   top: .5rem;
@@ -118,7 +184,7 @@
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   position: absolute;
   top: 2px;
@@ -166,10 +232,10 @@
     .calendar-table td:not(:last-child) {
       border-right: 1px solid #ddd; }
     .calendar-table td.today {
-      color: #28f;
+      color: MEDIUMSEAGREEN;
       font-weight: 600; }
     .calendar-table td.selected {
-      box-shadow: inset 0 0 0 2px #28f; }
+      box-shadow: inset 0 0 0 2px MEDIUMSEAGREEN; }
   .calendar-table tbody td {
     transition: background 150ms ease; }
     .calendar-table tbody td:hover {
@@ -194,7 +260,7 @@
     float: left;
     padding: 0;
     margin: 0;
-    background: #28f;
+    background: MEDIUMSEAGREEN;
     margin-right: 2px; }
     .calendar-dots li.task-checked {
       background-color: #888; }
@@ -203,7 +269,7 @@
 
 .calendar-weekdays {
   background: #fff;
-  color: #28f;
+  color: MEDIUMSEAGREEN;
   font-weight: 300; }
 
 .calendar-body tr.calendar-weekdays {
@@ -302,7 +368,7 @@
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   right: 2px;
   top: 2px;
@@ -325,7 +391,7 @@
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   color: #888;
   height: 1.5rem;
@@ -348,17 +414,6 @@
 .full-todo {
   position: absolute;
   background: #fff; }
-
-html {
-  font-size: 18px;
-  font-weight: 400;
-  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
-  color: #333; }
-
-body {
-  background-size: cover;
-  background-attachment: fixed;
-  margin: 0; }
 
 @media screen and (min-width: 878px) {
   .mobile-only {
@@ -401,7 +456,7 @@ body {
   color: #555;
   border-radius: 4px;
   background-color: transparent;
-  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
+  font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
   display: block;
   width: 100%;
@@ -425,15 +480,9 @@ body {
     height: 80px;
     width: 80px;
     border: 10px solid #eee;
-    border-left-color: #28f;
+    border-left-color: MEDIUMSEAGREEN;
     border-radius: 50%;
     animation: spin linear infinite 600ms; }
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg); }
-  100% {
-    transform: rotate(360deg); } }
 
 .app {
   margin: 0;
@@ -442,57 +491,7 @@ body {
   overflow-x: hidden;
   position: relative; }
 
-.toolbar {
-  background: #f8f8f8;
-  height: 2rem;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 8;
-  font-size: .9rem;
-  padding: 0 0 0 1rem;
-  text-align: left;
-  border-bottom: 1px solid #ddd; }
-  .toolbar h1 {
-    font-size: .9rem;
-    line-height: 2rem;
-    font-weight: 600;
-    margin: 0;
-    display: inline; }
-
-.menu-button {
-  display: inline-block;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  font-size: 1em;
-  color: #555;
-  border-radius: 4px;
-  background-color: transparent;
-  font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
-  transition: 150ms ease;
-  background: transparent;
-  position: absolute;
-  right: 0;
-  top: 0;
-  color: #888;
-  border-radius: 0;
-  padding: 0 .5rem;
-  height: 2rem;
-  transition: 150ms ease; }
-  .menu-button:hover {
-    background: rgba(0, 0, 0, 0.05); }
-  .menu-button:active {
-    background: rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
-  .menu-button:hover {
-    background: rgba(0, 0, 0, 0.1); }
-  .menu-button:active {
-    background: rgba(0, 0, 0, 0.2);
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
-
 .wrap {
-  margin-top: 2rem;
   display: flex; }
   @media screen and (max-width: 640px) {
     .wrap {
@@ -500,78 +499,12 @@ body {
 
 .window {
   overflow: hidden;
-  height: calc(100vh - 2rem);
+  height: 100vh;
   width: calc(100% - 300px); }
   @media screen and (max-width: 878px) {
     .window {
       width: 100%;
       overflow-y: auto; } }
-
-.sidebar {
-  width: 300px;
-  min-height: 300px;
-  padding: .5rem;
-  background: #f8f8f8;
-  border-left: 1px solid #ddd; }
-  .sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0; }
-  .sidebar button {
-    display: inline-block;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 1em;
-    color: #555;
-    border-radius: 4px;
-    background-color: transparent;
-    font-family: "Inter", "Lato", "Segoe UI", Helvetica, sans-serif;
-    transition: 150ms ease;
-    font-size: .9rem;
-    color: #555;
-    width: 100%;
-    padding: .5rem;
-    margin-bottom: .5rem;
-    text-align: left;
-    border-radius: 4px; }
-    .sidebar button:hover {
-      background: rgba(0, 0, 0, 0.05); }
-    .sidebar button:active {
-      background: rgba(0, 0, 0, 0.1);
-      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
-  @media screen and (max-width: 878px) {
-    .sidebar {
-      position: absolute;
-      z-index: 10;
-      right: 0;
-      transform: translateX(100%);
-      width: 100%;
-      max-width: 300px;
-      top: 2rem;
-      transition: 300ms ease;
-      border: 1px solid #ddd;
-      border-top-width: 0;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
-      .sidebar-open {
-        transform: translateX(0); } }
-
-@media screen and (max-width: 878px) {
-  .sidebar-clear {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.1);
-    z-index: 7;
-    z-index: 5;
-    opacity: 0;
-    visibility: hidden;
-    transition: 300ms ease; }
-    .sidebar-clear-open {
-      opacity: 1;
-      visibility: visible; } }
 
 .row {
   display: flex;

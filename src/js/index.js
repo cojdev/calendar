@@ -2,9 +2,12 @@
 import Vue from 'vue';
 
 // Components
+import './components/Calendar';
 import './components/CalendarHead';
 import './components/CalendarTable';
 import './components/Modal';
+import './components/Sidebar';
+import './components/TaskList';
 
 import cal from './cal';
 import {
@@ -98,10 +101,14 @@ const todo = new Vue({
     // Returns a matrix of days and weeks of the month [[1,2,...],[8,9,...],...]
     getWeeks() {
       // Empty array
-      const weeks = []; // Date object of the first day of the active month
-      const dateObject = new Date(this.activeYear, this.activeMonth, 1); // 0-6 numerical value of the first day of the month
-      const firstWeekday = dateObject.getDay(); // Get the month length dynamically so leap years are accounted for
-      const monthLength = new Date(this.activeYear, this.activeMonth + 1, 0).getDate(); // Set current day to 1 each time this function is called
+      const weeks = [];
+      // Date object of the first day of the active month
+      const dateObject = new Date(this.activeYear, this.activeMonth, 1);
+      // 0-6 numerical value of the first day of the month
+      const firstWeekday = dateObject.getDay();
+      // Get the month length dynamically so leap years are accounted for
+      const monthLength = new Date(this.activeYear, this.activeMonth + 1, 0).getDate();
+      // Set current day to 1 each time this function is called
       let currentDay = 1;
 
       // Loop through weeks in a month

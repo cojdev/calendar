@@ -1,0 +1,39 @@
+.sidebar {
+  width: $sidebar-width;
+  position: relative;
+  min-height: 300px;
+  padding: .5rem;
+  background: #f8f8f8;
+
+  &__list {
+      @include ul;
+  }
+  
+  &__button {
+      @include button;
+      font-size: .9rem;
+      color: #555;
+      width: 100%;
+      padding: .5rem;
+      margin-bottom: .5rem;
+      text-align: left;
+      border-radius: $border-radius;
+  }
+  
+  @media screen and (max-width: $break) {
+      position: absolute;
+      z-index: 10;
+      right:0;
+      transform: translateX(100%);
+      width: 100%;
+      max-width: $sidebar_width;
+      top: $toolbar-height;
+      transition: $transition-2;
+      border: 1px solid #ddd;
+      border-top-width: 0;
+      box-shadow: $shadow-2;
+      &-open {
+          transform: translateX(0);
+      }
+  }
+}
