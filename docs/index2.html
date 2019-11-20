@@ -30,10 +30,9 @@
 
             <!-- Calendar -->
             <calendar
-              :month="monthNames[activeMonth]"
+              :month="activeMonth"
               :year="activeYear"
-              :weeks="getWeeks"
-              :day-names="weekdayNames"
+              :get-tasks="getTasks"
               :is-today="isToday"
               :is-selected="isSelected"
               :is-state="isState"
@@ -80,8 +79,8 @@
       :modal-open="(taskOpen && isState('full')) || newTask"
       :new-task="newTask"
       :form-error="formError"
-      v-model="enteredTask"
-      v-model="enteredDate"
+      :entered-task="enteredTask"
+      :entered-date="enteredDate"
       ></modal>
     </template>
     <template v-else>

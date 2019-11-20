@@ -9,7 +9,6 @@ import './components/Modal';
 import './components/Sidebar';
 import './components/TaskList';
 
-import cal from './cal';
 import {
   formatDateInput, parseDate, formatDate, ajax, isPast,
 } from './helpers';
@@ -26,8 +25,6 @@ const todo = new Vue({
   el: '#app',
 
   data: {
-    weekdayNames: cal.days.map(a => a.slice(0, 3)),
-    monthNames: cal.months,
     currentYear: date.getFullYear(),
     currentMonth: date.getMonth(),
     today: date.getDate(),
@@ -57,11 +54,10 @@ const todo = new Vue({
   },
 
   created() {
-    this.activeMonth = this.currentMonth;
     this.enteredDate = formatDateInput(this.todayObj);
     this.getListDB();
-    if (localStorage.getItem('savedState')) {
-      this.state = localStorage.getItem('savedState');
+    if (localStorage.getItem('savedView')) {
+      this.state = localStorage.getItem('savedView');
       console.log('local storage loaded');
     }
   },
@@ -69,88 +65,33 @@ const todo = new Vue({
   watch: {
     selected: {
       handler() {
-        const self = this;
-        this.enteredDate = formatDateInput(this.selected);
-        self.currentList = this.taskList.filter(a => (
-          parseDate(a.due).day === self.selected.day
-          && parseDate(a.due).month === self.selected.month
-          && parseDate(a.due).year === self.selected.year));
+        const { selected } = this;
+        this.enteredDate = formatDateInput(selected);
+        this.currentList = this.taskList.filter(a => (
+          parseDate(a.due).day === selected.day
+          && parseDate(a.due).month === selected.month
+          && parseDate(a.due).year === selected.year));
       },
       deep: true,
     },
+
     taskList: {
       handler() {
-        const self = this;
-        self.currentList = this.taskList.filter(a => (
-          parseDate(a.due).day === self.selected.day
-            && parseDate(a.due).month === self.selected.month
-            && parseDate(a.due).year === self.selected.year));
+        const { selected } = this;
+        this.currentList = this.taskList.filter(a => (
+          parseDate(a.due).day === selected.day
+          && parseDate(a.due).month === selected.month
+          && parseDate(a.due).year === selected.year));
       },
       deep: true,
     },
+
     state: {
       handler() {
-        localStorage.setItem('savedState', this.state);
-        console.log('STATE SAVED');
+        localStorage.setItem('savedView', this.state);
+        console.log('View state saved to local storage');
       },
       deep: true,
-    },
-  },
-
-  computed: {
-    // Returns a matrix of days and weeks of the month [[1,2,...],[8,9,...],...]
-    getWeeks() {
-      // Empty array
-      const weeks = [];
-      // Date object of the first day of the active month
-      const dateObject = new Date(this.activeYear, this.activeMonth, 1);
-      // 0-6 numerical value of the first day of the month
-      const firstWeekday = dateObject.getDay();
-      // Get the month length dynamically so leap years are accounted for
-      const monthLength = new Date(this.activeYear, this.activeMonth + 1, 0).getDate();
-      // Set current day to 1 each time this function is called
-      let currentDay = 1;
-
-      // Loop through weeks in a month
-      for (let i = 0; i < 6 && currentDay < monthLength + 1; i++) {
-        weeks.push([]);
-        if (i === 0) {
-          // Loop through days in the first week of the month
-          for (let j = 0; j < 7; j++) {
-            if (j < firstWeekday) {
-              weeks[i].push('');
-            } else {
-              weeks[i].push({
-                day: currentDay,
-                month: this.activeMonth,
-                year: this.activeYear,
-              });
-              const elem = weeks[i][weeks[i].length - 1];
-              elem.todos = this.getTodos(elem);
-
-              currentDay++;
-            }
-          }
-        } else {
-          // Loop through days in each other week
-          for (let j = 0; j < 7; j++) {
-            if (currentDay < monthLength + 1) {
-              weeks[i].push({
-                day: currentDay,
-                month: this.activeMonth,
-                year: this.activeYear,
-              });
-              const elem = weeks[i][weeks[i].length - 1];
-              elem.todos = this.getTodos(elem);
-              currentDay++;
-            } else {
-              weeks[i].push('');
-            }
-          }
-        }
-      }
-
-      return weeks;
     },
   },
 
@@ -235,7 +176,8 @@ const todo = new Vue({
       return this.state === str;
     },
 
-    closeModal() {
+    closeModal(e) {
+      console.log(e);
       if (this.taskOpen) this.taskOpen = false;
       if (this.newTask) this.newTask = false;
     },
@@ -252,7 +194,7 @@ const todo = new Vue({
       this.state = this.state === 'split' ? 'full' : 'split';
     },
 
-    getTodos(obj) {
+    getTasks(obj) {
       return this.taskList.filter(a => parseDate(a.due).day === obj.day
           && parseDate(a.due).month === obj.month
           && parseDate(a.due).year === obj.year);

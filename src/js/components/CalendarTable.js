@@ -8,7 +8,7 @@ Vue.component('calendar-table', {
     <table class="calendar-table">
       <thead>
         <tr class="calendar-weekdays">
-          <td v-for="weekday in dayNames">{{ weekday }}</td>
+          <td v-for="weekday in dayNames">{{ weekday.substr(0,3) }}</td>
         </tr>
       </thead>
 
@@ -24,9 +24,9 @@ Vue.component('calendar-table', {
                   class="fa fa-plus" aria-hidden="true"></i></button>
 
               <ul :class="{'calendar-dots': isState('split'), 'calendar-list': isState('full')}"
-                v-if="day.todos.length > 0 && day.day">
+                v-if="day.tasks.length > 0 && day.day">
                 <div style="min-width: 7rem">
-                  <li v-for="task in day.todos" :class="{'task-checked': task.completed !== null, 'task-starred': task.starred === '1'}">
+                  <li v-for="task in day.tasks" :class="{'task-checked': task.completed !== null, 'task-starred': task.starred === '1'}">
                     <template v-if="isState('full')">
                       {{ task.description }} ({{ task.starred }})
                     </template>

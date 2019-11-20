@@ -24,10 +24,10 @@
 
               <ul
                 :class="{'calendar-dots': isState('split'), 'calendar-list': isState('full')}"
-                v-if="day.todos.length > 0 && day.day"
+                v-if="day.tasks.length > 0 && day.day"
               >
                 <div style="min-width: 7rem">
-                  <li v-for="task in day.todos" :class="{'task-checked': task.checked === '1'}" :key="task.id">
+                  <li v-for="task in day.tasks" :class="{'task-checked': task.checked === '1'}" :key="task.id">
                     <template v-if="isState('full')">{{ task.description }}</template>
                   </li>
                 </div>
