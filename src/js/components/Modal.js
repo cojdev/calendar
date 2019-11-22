@@ -1,12 +1,16 @@
 import Vue from 'vue';
 
 Vue.component('modal', {
-  props: ['modalOpen', 'newTask', 'formError', 'isSelected', 'isState', 'enteredTask', 'enteredDate'],
+  props: ['modalOpen', 'newTask', 'formError', 'isSelected', 'isState', 'enteredTask', 'enteredDate', 'close'],
+
+  methods: {
+    closeModal,
+  },
 
   template: `
   <div class="modal-overlay" :class="{'modal-overlay-open': modalOpen}" @click="$emit('close-modal')">
     <div class="new-task" v-if="newTask">
-      <button class="close-button" @click="$emit('close-modal')"><i class="fa fa-times" aria-hidden="true"></i></button>
+      <button class="close-button" @click="closeModal"><i class="fa fa-times" aria-hidden="true"></i></button>
       
       <label for="">New Task</label>
       <input type="text" placeholder="Add a new task" :value="enteredTask" @input="$emit('input', $event.target.value)" @keyup.enter="$emit('add-task')">

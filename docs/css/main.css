@@ -423,30 +423,6 @@ body {
   color: #aaa;
   text-decoration: line-through; }
 
-.new-task {
-  position: fixed;
-  display: block;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  margin: 0 auto;
-  background: #fff;
-  border-radius: 4px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-  min-width: 300px;
-  max-width: 100%;
-  z-index: 8;
-  padding: 1rem; }
-  .new-task input {
-    outline: none;
-    display: block;
-    padding: .5rem;
-    font-size: 18px;
-    color: #333;
-    border: 2px solid #ddd;
-    width: 100%;
-    margin-bottom: 1rem; }
-
 .submit-button {
   display: inline-block;
   border: none;

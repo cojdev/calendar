@@ -20,22 +20,6 @@
   text-decoration: line-through;
 }
 
-.new-task {
-  @include modal;
-  padding: 1rem;
-
-  input {
-    outline: none;
-    display: block;
-    padding: .5rem;
-    font-size: 18px;
-    color: #333;
-    border: 2px solid $line-colour;
-    width: 100%;
-    margin-bottom: 1rem;
-  }
-}
-
 .submit-button {
   @include button;
   display: block;

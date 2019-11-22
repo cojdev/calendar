@@ -19,19 +19,7 @@
   <!-- Vue App -->
   <div id="app" class="app">
     <template v-if="loaded">
-      <!-- Toolbar -->
-      <div class="toolbar">
-        <h1>Calendar To-Do App</h1>
-        <button class="menu-button mobile-only" @click="toggleSidebar">
-          <template v-if="!sidebar">
-            Menu <i class="fa fa-bars" aria-hidden="true"></i>
-          </template>
-          <template v-else>
-            Close <i class="fa fa-times" aria-hidden="true"></i>
-          </template>
 
-        </button>
-      </div>
       <div class="wrap" v-cloak>
         <div class="sidebar-clear" :class="{'sidebar-clear-open': sidebar || newTask}" @click="closeSidebar">
         </div>
@@ -39,134 +27,61 @@
         <!-- Window -->
         <div class="window">
           <div class="row">
-            <div :class="{'calendar-split': isState('split'), 'calendar-full': isState('full')}">
 
-              <!-- Calendar Head -->
-              <div class="calendar-head">
-                {{ monthNames[activeMonth] }} {{ activeYear }}
-                <button class="arrow-button" @click="prevYear()">
-                  <i class="fa fa-angle-double-left" aria-hidden="true"></i>
-                </button>
-                <button class="arrow-button" @click="prevMonth()">
-                  <i class="fa fa-angle-left" aria-hidden="true"></i>
-                </button>
-                <button class="arrow-button" @click="nextMonth()">
-                  <i class="fa fa-angle-right" aria-hidden="true"></i>
-                </button>
-                <button class="arrow-button" @click="nextYear()">
-                  <i class="fa fa-angle-double-right" aria-hidden="true"></i>
-                </button>
-              </div>
-
-              <!-- Calendar Table -->
-              <div class="calendar-table-wrap">
-
-                <table class="calendar-table">
-                  <thead>
-                    <tr class="calendar-weekdays">
-                      <td v-for="weekday in weekdayNames">{{ weekday }}</td>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr v-for="week in getWeeks">
-
-                      <!-- Single Day -->
-                      <td v-for="day in week" :class="{today: isToday(day.day), selected: isSelected(day.day)}"
-                        @click="selectDay(day.day)">
-                        {{ day.day }}
-                        <template v-if="day.day">
-                          <button class="day-button" @click="taskOpen = true" v-if="isState('full')"><i
-                              class="fa fa-plus" aria-hidden="true"></i></button>
-
-                          <ul :class="{'calendar-dots': isState('split'), 'calendar-list': isState('full')}"
-                            v-if="day.tasks.length > 0 && day.day">
-                            <div style="min-width: 7rem">
-                              <li v-for="task in day.tasks" :class="{'task-checked': task.completed !== null, 'task-starred': task.starred === '1'}">
-                                <template v-if="isState('full')">
-                                  {{ task.description }} ({{ task.starred }})
-                                </template>
-                              </li>
-                            </div>
-                          </ul>
-
-                        </template>
-                      </td>
-
-                    </tr>
-                  </tbody>
-                </table>
-
-              </div>
-            </div>
-
-            <!-- Modals -->
-            <div class="modal-overlay" :class="{'modal-overlay-open': (taskOpen && isState('full')) || newTask}"
-              @click="closeModal"></div>
-            <div class="new-task" v-if="newTask">
-              <button class="close-button" @click="closeModal"><i class="fa fa-times" aria-hidden="true"></i></button>
-              <label for="">New Task</label>
-              <input type="text" placeholder="Add a new task" v-model="enteredTask" @keyup.enter="addTask">
-              <label for="">Date</label>
-              <input type="date" v-model="enteredDate">
-              <button class="submit-button" @click="addTask">Add task</button>
-              <div v-if="formError !== ''" class="error">{{formError}}</div>
-            </div>
+            <!-- Calendar -->
+            <calendar
+              :month="activeMonth"
+              :year="activeYear"
+              :get-tasks="getTasks"
+              :is-today="isToday"
+              :is-selected="isSelected"
+              :is-state="isState"
+              :select-day="selectDay"
+              @next-month="nextMonth"
+              @next-year="nextYear"
+              @prev-month="prevMonth"
+              @prev-year="prevYear"
+              @open-task="taskOpen = true"
+              ></calendar>
 
             <!-- To Do List -->
-            <div :class="{todo: isState('split'), 'todo-modal': isState('full')}" v-if="taskOpen || isState('split')">
-              <button class="close-button" @click="closeModal" v-if="isState('full')"><i class="fa fa-times"
-                  aria-hidden="true"></i></button>
-              <div class="todo-date">{{ formatDate(selected) }}</div>
-              <label for=""></label>
-              <input type="text" placeholder="Add a new task" v-if="!isPast(selected)" v-model="enteredTask"
-                @keyup.enter="addTask">
-              <button class="submit-button" @click="addTask" v-if="!isPast(selected)">Add task</button>
-              <template v-if="currentList.length !== 0">
-                <ul>
-                  <li v-for="task in currentList">
-                    <input type="checkbox" :checked="task.completed !== null" @input="completeTask(task)">
-                    <span :class="{'task-checked': task.completed !== null, 'task-starred': task.starred === '1'}">{{ task.description }} ({{ task.starred }})</span>
-                    <div class="task-buttons">
-                      <button class="delete-button" @click="removeTask(task)"><i class="fa fa-times"
-                          aria-hidden="true"></i></button>
-                    </div>
-
-                  </li>
-                </ul>
-              </template>
-              <template v-else>
-                <p>You have no tasks</p>
-              </template>
-            </div>
+            <task-list
+              :is-state="isState"
+              :open="taskOpen"
+              :close-modal="closeModal"
+              :is-past="isPast"
+              :entered-task="enteredTask"
+              :add-task="addTask"
+              :list="currentList"
+              :format-date="formatDate"
+              :selected="selected"
+              :remove-task="removeTask"
+              ></task-list>
           </div>
         </div>
 
         <!-- Sidebar -->
-        <div class="sidebar" :class="{'sidebar-open' : sidebar}">
-          <ul>
-            <li>
-              <button class="sidebar-button" @click="addNewTask">New Task <i class="fa fa-plus"
-                  aria-hidden="true"></i></button>
-            </li>
-            <li>
-              <button class="sidebar-button" @click="toggleState">
-                <template v-if="isState('split')">
-                  <i class="fa fa-arrows-alt" aria-hidden="true"></i> Full View
-                </template>
-                <template v-else>
-                  <i class="fa fa-columns" aria-hidden="true"></i> Split View
-                </template>
-              </button>
-            </li>
-            <li>
-              <button class="sidebar-button" @click="getListDB" v-if="database">
-                <i class="fa fa-refresh" aria-hidden="true"></i> Refresh list
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
+        <sidebar
+          :add-new-task="addNewTask"
+          :toggle-state="toggleState"
+          :get-list-db="getListDB"
+          :is-state="isState"
+          :open="sidebar"
+          :toggle-sidebar="toggleSidebar"
+          :task-list="taskList"
+          :database="database"
+          ></sidebar>
+
+      <!-- Modals -->
+      <modal
+        :close="closeModal"
+        @add-task="addTask"
+        :modal-open="(taskOpen && isState('full')) || newTask"
+        :new-task="newTask"
+        :form-error="formError"
+        :entered-task="enteredTask"
+        :entered-date="enteredDate"
+        ></modal>
     </template>
     <template v-else>
       <div class="loader"></div>
@@ -174,7 +89,6 @@
 
   </div>
 
-  <!-- <script src="js/vue.min.js"></script> -->
   <script src="js/bundle.js"></script>
 </body>
 
