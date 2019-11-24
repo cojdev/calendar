@@ -21,55 +21,6 @@ body {
   100% {
     transform: rotate(360deg); } }
 
-.sidebar {
-  width: 300px;
-  position: relative;
-  min-height: 300px;
-  padding: .5rem;
-  background: #f8f8f8; }
-  .sidebar__list {
-    list-style: none;
-    padding: 0;
-    margin: 0; }
-  .sidebar__button {
-    display: inline-block;
-    border: none;
-    outline: none;
-    cursor: pointer;
-    font-size: 1em;
-    color: #555;
-    border-radius: 4px;
-    background-color: transparent;
-    font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
-    transition: 150ms ease;
-    font-size: .9rem;
-    color: #555;
-    width: 100%;
-    padding: .5rem;
-    margin-bottom: .5rem;
-    text-align: left;
-    border-radius: 4px; }
-    .sidebar__button:hover {
-      background: rgba(0, 0, 0, 0.05); }
-    .sidebar__button:active {
-      background: rgba(0, 0, 0, 0.1);
-      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
-  @media screen and (max-width: 878px) {
-    .sidebar {
-      position: absolute;
-      z-index: 10;
-      right: 0;
-      transform: translateX(100%);
-      width: 100%;
-      max-width: 300px;
-      top: 2rem;
-      transition: 300ms ease;
-      border: 1px solid #ddd;
-      border-top-width: 0;
-      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
-      .sidebar-open {
-        transform: translateX(0); } }
-
 .calendar-full {
   width: 100%;
   height: calc(100vh - 2rem);
@@ -275,40 +226,7 @@ body {
 .calendar-body tr.calendar-weekdays {
   border-bottom: 2px solid #ddd; }
 
-.todo {
-  background: white;
-  border: none;
-  padding: 1rem 2rem;
-  margin: 0;
-  position: relative;
-  z-index: 1;
-  flex: 1;
-  min-height: 300px;
-  min-width: 200px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); }
-  .todo p {
-    color: #888;
-    font-size: 1rem; }
-  .todo input[type=text] {
-    outline: none;
-    display: block;
-    padding: .5rem;
-    font-size: 18px;
-    color: #333;
-    border: 2px solid #ddd;
-    width: 100%;
-    margin-bottom: 1rem; }
-  .todo ul {
-    text-align: left;
-    padding: 0;
-    margin: 0;
-    list-style: none; }
-  .todo li {
-    line-height: 1.5rem;
-    padding: .25rem;
-    border-bottom: 1px solid #ddd; }
-
-.todo-modal {
+.modal {
   position: fixed;
   display: block;
   top: 50%;
@@ -322,44 +240,103 @@ body {
   max-width: 100%;
   z-index: 8;
   padding: 1rem;
-  width: 400px; }
-  .todo-modal p {
+  width: 700px;
+  max-width: 90%; }
+  .modal p {
     color: #888;
     font-size: 1rem; }
-  .todo-modal input[type=text] {
-    outline: none;
-    display: block;
-    padding: .5rem;
-    font-size: 18px;
-    color: #333;
-    border: 2px solid #ddd;
-    width: 100%;
-    margin-bottom: 1rem; }
-  .todo-modal ul {
+  .modal ul {
     text-align: left;
     padding: 0;
     margin: 0;
     list-style: none; }
-  .todo-modal li {
+  .modal li {
     line-height: 1.5rem;
     padding: .25rem;
     border-bottom: 1px solid #ddd; }
+  .modal__overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.1);
+    z-index: 7;
+    opacity: 0;
+    visibility: hidden; }
+    .modal__overlay--open {
+      opacity: 1;
+      visibility: visible; }
+  .modal__close {
+    display: inline-block;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    color: #555;
+    border-radius: 4px;
+    background-color: transparent;
+    font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
+    transition: 150ms ease;
+    right: 2px;
+    top: 2px;
+    position: absolute; }
+    .modal__close:hover {
+      background: rgba(0, 0, 0, 0.05); }
+    .modal__close:active {
+      background: rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
 
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.1);
-  z-index: 7;
-  opacity: 0;
-  visibility: hidden; }
-  .modal-overlay-open {
-    opacity: 1;
-    visibility: visible; }
+.sidebar {
+  width: 300px;
+  position: relative;
+  min-height: 300px;
+  padding: .5rem;
+  background: #f8f8f8; }
+  .sidebar__list {
+    list-style: none;
+    padding: 0;
+    margin: 0; }
+  .sidebar__button {
+    display: inline-block;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    font-size: 1em;
+    color: #555;
+    border-radius: 4px;
+    background-color: transparent;
+    font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
+    transition: 150ms ease;
+    font-size: .9rem;
+    color: #555;
+    width: 100%;
+    padding: .5rem;
+    margin-bottom: .5rem;
+    text-align: left;
+    border-radius: 4px; }
+    .sidebar__button:hover {
+      background: rgba(0, 0, 0, 0.05); }
+    .sidebar__button:active {
+      background: rgba(0, 0, 0, 0.1);
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
+  @media screen and (max-width: 878px) {
+    .sidebar {
+      position: absolute;
+      z-index: 10;
+      right: 0;
+      transform: translateX(100%);
+      width: 100%;
+      max-width: 300px;
+      top: 2rem;
+      transition: 300ms ease;
+      border: 1px solid #ddd;
+      border-top-width: 0;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+      .sidebar-open {
+        transform: translateX(0); } }
 
-.close-button {
+.task-form__submit {
   display: inline-block;
   border: none;
   outline: none;
@@ -370,19 +347,56 @@ body {
   background-color: transparent;
   font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
   transition: 150ms ease;
-  right: 2px;
-  top: 2px;
-  position: absolute; }
-  .close-button:hover {
+  display: block;
+  width: 100%;
+  height: 2rem;
+  border: 1px solid #eee; }
+  .task-form__submit:hover {
     background: rgba(0, 0, 0, 0.05); }
-  .close-button:active {
+  .task-form__submit:active {
     background: rgba(0, 0, 0, 0.1);
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
+
+.task-form input[type=text],
+.task-form input[type=date],
+.task-form input[type=number] {
+  outline: none;
+  display: block;
+  padding: .5rem;
+  font-size: 18px;
+  color: #333;
+  border: 2px solid #ddd;
+  width: 100%;
+  margin-bottom: 1rem; }
+
+.checked {
+  color: #aaa;
+  text-decoration: line-through; }
+
+.task-list {
+  border: none;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  min-width: 200px; }
+  .task-list p {
+    color: #888;
+    font-size: 1rem; }
+  .task-list ul {
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    list-style: none; }
+  .task-list li {
+    line-height: 1.5rem;
+    padding: .25rem;
+    border-bottom: 1px solid #ddd; }
 
 .task-buttons {
   float: right; }
 
-.edit-button, .delete-button {
+.edit-button,
+.delete-button {
   display: inline-block;
   border: none;
   outline: none;
@@ -398,9 +412,11 @@ body {
   margin-left: .5rem;
   width: 1.5rem;
   line-height: 1.5rem; }
-  .edit-button:hover, .delete-button:hover {
+  .edit-button:hover,
+  .delete-button:hover {
     background: rgba(0, 0, 0, 0.05); }
-  .edit-button:active, .delete-button:active {
+  .edit-button:active,
+  .delete-button:active {
     background: rgba(0, 0, 0, 0.1);
     box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
 
@@ -418,31 +434,6 @@ body {
 @media screen and (min-width: 878px) {
   .mobile-only {
     display: none !important; } }
-
-.checked {
-  color: #aaa;
-  text-decoration: line-through; }
-
-.submit-button {
-  display: inline-block;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  font-size: 1em;
-  color: #555;
-  border-radius: 4px;
-  background-color: transparent;
-  font-family: "Inter", "Segoe UI", Helvetica, sans-serif;
-  transition: 150ms ease;
-  display: block;
-  width: 100%;
-  height: 2rem;
-  border: 1px solid #eee; }
-  .submit-button:hover {
-    background: rgba(0, 0, 0, 0.05); }
-  .submit-button:active {
-    background: rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.25); }
 
 .loader {
   display: flex;
@@ -484,10 +475,13 @@ body {
 
 .row {
   display: flex;
-  background: #ddd;
-  min-height: 100%; }
+  flex-wrap: wrap;
+  justify-content: space-between; }
   @media screen and (max-width: 640px) {
     .row {
       display: block; } }
+
+.col {
+  width: 47.5%; }
 
 /*# sourceMappingURL=main.css.map */

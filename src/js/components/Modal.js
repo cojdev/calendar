@@ -1,25 +1,38 @@
 import Vue from 'vue';
 
 Vue.component('modal', {
-  props: ['modalOpen', 'newTask', 'formError', 'isSelected', 'isState', 'enteredTask', 'enteredDate', 'close'],
+  props: ['modalOpen', 'newTask', 'formError', 'isSelected', 'isState', 'close', 'isState', 'isPast', 'list', 'selected', 'removeTask', 'addTask'],
 
   methods: {
-    closeModal,
+    closeModal(e) {
+      if ([this.$refs.overlay, this.$refs.close].includes(e.target)) {
+        this.close(e);
+      }
+    },
   },
 
   template: `
-  <div class="modal-overlay" :class="{'modal-overlay-open': modalOpen}" @click="$emit('close-modal')">
-    <div class="new-task" v-if="newTask">
-      <button class="close-button" @click="closeModal"><i class="fa fa-times" aria-hidden="true"></i></button>
+  <div class="modal__overlay" :class="{'modal__overlay--open': modalOpen}" @click="closeModal" ref="overlay">
+    <div class="modal" v-if="newTask">
+      <div class="row">
+        <task-list
+          class="col"
+          :is-state="isState"
+          :is-past="isPast"
+          @add-task="addTask"
+          :list="list"
+          :selected="selected"
+          :remove-task="removeTask"></task-list>
+
+        <task-form
+          class="col"
+          :add-task="addTask"
+          :modal-open="modalOpen"
+          :new-task="newTask"
+          :selected="selected"
+          :form-error="formError"></task-form>
+      </div>
       
-      <label for="">New Task</label>
-      <input type="text" placeholder="Add a new task" :value="enteredTask" @input="$emit('input', $event.target.value)" @keyup.enter="$emit('add-task')">
-      
-      <label for="">Date</label>
-      <input type="date" :value="enteredDate" @input="$emit('input', $event.target.value)">
-      
-      <button class="submit-button" @click="$emit('add-task')">Add task</button>
-      <div v-if="formError !== ''" class="error">{{formError}}</div>
     </div>
   </div>
 `,

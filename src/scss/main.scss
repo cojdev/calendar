@@ -5,9 +5,11 @@
 @import 'animations';
 
 // components
-@import 'components/sidebar';
 @import 'components/calendar';
-@import 'components/todo';
+@import 'components/modal';
+@import 'components/sidebar';
+@import 'components/task-form';
+@import 'components/task-list';
 
 .mobile-only {
   @media screen and (min-width: $br-sidebar) {
@@ -15,18 +17,6 @@
   }
 }
 
-.checked {
-  color: #aaa;
-  text-decoration: line-through;
-}
-
-.submit-button {
-  @include button;
-  display: block;
-  width: 100%;
-  height: 2rem;
-  border: 1px solid #eee;
-}
 
 .loader {
   display: flex;
@@ -76,10 +66,14 @@
 
 .row {
   display: flex;
-  background: #ddd;
-  min-height: 100%;
+  flex-wrap: wrap;
+  justify-content: space-between;
 
   @media screen and (max-width: $sm) {
     display: block;
   }
+}
+
+.col {
+  width: 47.5%;
 }

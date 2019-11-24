@@ -5,9 +5,10 @@ import Vue from 'vue';
 import './components/Calendar';
 import './components/CalendarHead';
 import './components/CalendarTable';
+import './components/TaskList';
+import './components/TaskForm';
 import './components/Modal';
 import './components/Sidebar';
-import './components/TaskList';
 
 import {
   formatDateInput, parseDate, formatDate, ajax, isPast,
@@ -42,8 +43,6 @@ const todo = new Vue({
     taskOpen: false,
     loaded: false,
     newTask: false,
-    enteredTask: '',
-    enteredDate: '',
     sidebar: false,
     formError: '',
     selected: {
@@ -54,7 +53,6 @@ const todo = new Vue({
   },
 
   created() {
-    this.enteredDate = formatDateInput(this.todayObj);
     this.getListDB();
     if (localStorage.getItem('savedView')) {
       this.state = localStorage.getItem('savedView');
@@ -66,7 +64,6 @@ const todo = new Vue({
     selected: {
       handler() {
         const { selected } = this;
-        this.enteredDate = formatDateInput(selected);
         this.currentList = this.taskList.filter(a => (
           parseDate(a.due).day === selected.day
           && parseDate(a.due).month === selected.month
@@ -105,19 +102,19 @@ const todo = new Vue({
 
     },
 
-    addTask() {
-      const task = this.enteredTask.trim();
+    addTask(formData) {
+      console.log(formData);
+      const task = formData.task.trim();
       this.formError = '';
 
-      if (!isPast(parseDate(this.enteredDate))) {
+      if (!isPast(parseDate(formData.date))) {
         console.log(task);
         if (task) {
           ajax(`${config.API_URL}/task`, 'POST', {
             description: task,
-            due: this.enteredDate,
+            due: formData.date,
           }).then((res) => {
             console.log(res);
-            this.enteredTask = '';
             this.getListDB();
           }).catch((err) => {
             console.log(err);

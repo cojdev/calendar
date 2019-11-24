@@ -1,0 +1,61 @@
+.checked {
+  color: #aaa;
+  text-decoration: line-through;
+}
+
+.task-list {
+  border: none;
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  // min-height: 300px;
+  min-width: $todo-width;
+
+  p {
+      color: #888;
+      font-size: 1rem;
+  }
+
+  ul {
+      text-align: left;
+      padding: 0;
+      margin: 0;
+      list-style: none;
+  }
+  
+  li {
+      line-height: 1.5rem;
+      padding: .25rem;
+      border-bottom: 1px solid $line-colour;
+  }
+}
+
+.task-buttons {
+  float: right;
+}
+
+.edit-button,
+.delete-button {
+  @include button;
+
+  $size: 1.5rem;
+
+  color: #888;
+  height: $size;
+  margin-left: .5rem;
+  width: $size;
+  line-height: $size;
+}
+
+.todo-date {
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: #555;
+  border-bottom: 1px solid $line-colour;
+  margin-bottom: 1rem;
+}
+
+.full-todo {
+  position: absolute;
+  background: #fff;
+}

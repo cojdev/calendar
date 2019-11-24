@@ -12,9 +12,8 @@ Vue.component('calendar', {
   },
 
   computed: {
-    //
     /**
-     * @returns {[string, number]} 2d array of days and weeks in the current month [[1,2,...],[8,9,...],...]
+     * @returns {[string, number]} 2d array of days and weeks in the current month
      */
     getWeeks() {
       console.log('getweeks');
