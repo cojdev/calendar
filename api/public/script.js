@@ -31,9 +31,8 @@ const endpoints = {
 
 const updateMethod = () => {
   method.innerHTML = Object.keys(endpoints[endpoint.value]).map(item => `
-      <option value="${item}">${item}</option>
-      `).join('');
-  // console.trace('update method');
+    <option value="${item}">${item}</option>
+    `).join('');
 };
 
 // const updateParams = () => {
@@ -66,7 +65,7 @@ method.evt('input', setExample);
 
 form.evt('submit', (e) => {
   e.preventDefault();
-  const url = `/${qs('#endpoint').value.replace('[id]', qs('#id').value)}`;
+  const url = `/${qs('#endpoint').value.replace(':id', qs('#id').value)}`;
   const body = qs('#request-body').value ? JSON.parse(qs('#request-body').value) : null;
   console.log(body);
 

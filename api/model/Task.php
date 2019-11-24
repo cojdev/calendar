@@ -103,7 +103,7 @@ class Task {
       $result = $query->execute([
         $data['description'],
         $data['starred'] || 0,
-        $data['due'] || date('Y-m-d H:i:s'),
+        $data['due'],
       ]);
 
       $id = $this->db->query('SELECT LAST_INSERT_ID()')->fetch();
