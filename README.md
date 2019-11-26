@@ -39,9 +39,15 @@ cd api
 docker-compose up --build
 ```
 
-#### Access docker database
-```
-
+#### Access docker database and install backend dependencies
+```sh
+# get container id
+docker ps
+# access container
+docker exec -it <container-id> /bin/bash
+# install dependencies
+cd /var/www/html
+composer install
 ```
 
 The complete task list for all days can be saved to a MySQL database using the PHP PDO Class and prepared statement to prevent SQL injections. The Front End can communicate with the Back End using AJAX and dynamically generated JSON files.
