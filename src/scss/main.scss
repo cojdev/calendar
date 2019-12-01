@@ -6,10 +6,13 @@
 
 // components
 @import 'components/calendar';
+@import 'components/calendar-head';
+@import 'components/calendar-table';
 @import 'components/modal';
 @import 'components/sidebar';
 @import 'components/task-form';
 @import 'components/task-list';
+@import 'components/task-item';
 
 .mobile-only {
   @media screen and (min-width: $br-sidebar) {
@@ -39,7 +42,6 @@
 
 .app {
   margin: 0;
-  text-align: center;
   width: 100vw;
   overflow-x: hidden;
   position: relative;
@@ -76,4 +78,8 @@
 
 .col {
   width: 47.5%;
+}
+
+.checkbox {
+  @include checkbox;
 }

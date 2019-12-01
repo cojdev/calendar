@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import cal from '../cal';
+import cal from '../../cal';
 
 Vue.component('calendar', {
   props: ['getTasks', 'isToday', 'isSelected', 'isState', 'selectDay', 'openTask', 'month', 'year'],
@@ -9,6 +9,12 @@ Vue.component('calendar', {
       monthName: cal.months[this.month],
       dayNames: cal.days,
     };
+  },
+
+  watch: {
+    month(val) {
+      this.monthName = cal.months[val];
+    },
   },
 
   computed: {
@@ -76,7 +82,7 @@ Vue.component('calendar', {
 
   template: `
   <!-- Calendar -->
-  <div :class="{'calendar-split': isState('split'), 'calendar-full': isState('full')}">
+  <div class="calendar calendar--full">
     <!-- Calendar Head -->
     <calendar-head
       :month="monthName"
@@ -93,7 +99,6 @@ Vue.component('calendar', {
       :day-names="dayNames"
       :is-today="isToday"
       :is-selected="isSelected"
-      :is-state="isState"
       :select-day="selectDay"
       @open-task="$emit('open-task')"
       ></calendar-table>

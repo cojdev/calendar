@@ -30,12 +30,12 @@
 
             <!-- Calendar -->
             <calendar
+              v-if="view === 'calendar'"
               :month="activeMonth"
               :year="activeYear"
               :get-tasks="getTasks"
               :is-today="isToday"
               :is-selected="isSelected"
-              :is-state="isState"
               :select-day="selectDay"
               @next-month="nextMonth"
               @next-year="nextYear"
@@ -46,14 +46,16 @@
 
             <!-- To Do List -->
             <task-list
-              :is-state="isState"
+              v-if="view === 'list'"
               :open="taskOpen"
               :close-modal="closeModal"
               :is-past="isPast"
               :add-task="addTask"
-              :list="currentList"
+              :list="taskList"
               :selected="selected"
               :remove-task="removeTask"
+              :complete-task="completeTask"
+              :edit-task="editTask"
               ></task-list>
           </div>
         </div>
@@ -61,13 +63,11 @@
         <!-- Sidebar -->
         <sidebar
           :add-new-task="addNewTask"
-          :toggle-state="toggleState"
           :get-list-db="getListDB"
-          :is-state="isState"
           :open="sidebar"
           :toggle-sidebar="toggleSidebar"
-          :task-list="taskList"
           :database="database"
+          :set-view="setView"
           ></sidebar>
 
       <!-- Modals -->

@@ -1,0 +1,11 @@
+.calendar-head {
+  background: linear-gradient(100deg, lighten($primary, 10%), $primary);
+  color: #fff;
+  position: relative;
+  height: 3rem;
+  font-weight: 400;
+  font-size: 1.2rem;
+  line-height: 3rem;
+  box-shadow: $shadow-1;
+  text-align: center;
+}

@@ -1,7 +1,7 @@
 import Vue from 'vue';
 
 Vue.component('sidebar', {
-  props: ['addNewTask', 'toggleState', 'getListDb', 'isState', 'open', 'toggleSidebar', 'taskList', 'database'],
+  props: ['addNewTask', 'getListDb', 'open', 'toggleSidebar', 'database', 'setView'],
 
   template: `
     <div class="sidebar" :class="{'sidebar-open' : open}">
@@ -19,13 +19,13 @@ Vue.component('sidebar', {
         </li>
 
         <li>
-          <button class="sidebar__button">
+          <button class="sidebar__button" @click="setView('list')">
             List view
           </button>
         </li>
 
         <li>
-          <button class="sidebar__button">
+          <button class="sidebar__button" @click="setView('calendar')">
             Calendar view
           </button>
         </li>
@@ -36,30 +36,11 @@ Vue.component('sidebar', {
               aria-hidden="true"></i> New Task
           </button>
         </li>
-        
-        <li>
-          <button class="sidebar__button" @click="toggleState">
-            <template v-if="isState('split')">
-              <i class="fa fa-arrows-alt" aria-hidden="true"></i> Full View
-            </template>
-            <template v-else>
-              <i class="fa fa-columns" aria-hidden="true"></i> Split View
-            </template>
-          </button>
-        </li>
 
         <li>
           <button class="sidebar__button" @click="getListDb" v-if="database">
             <i class="fa fa-refresh" aria-hidden="true"></i> Refresh list
           </button>
-        </li>
-
-      </ul>
-
-
-      <ul>
-        <li v-for="task in taskList">
-          {{ task.description }}
         </li>
       </ul>
     </div>

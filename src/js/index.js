@@ -3,9 +3,11 @@ import Vue from 'vue';
 
 // Components
 import './components/Calendar';
-import './components/CalendarHead';
-import './components/CalendarTable';
+import './components/Calendar/Head';
+import './components/Calendar/Table';
+
 import './components/TaskList';
+import './components/TaskItem';
 import './components/TaskForm';
 import './components/Modal';
 import './components/Sidebar';
@@ -40,6 +42,7 @@ const todo = new Vue({
     database: false,
     taskList: [],
     state: 'split',
+    view: 'list',
     taskOpen: false,
     loaded: false,
     newTask: false,
@@ -98,8 +101,8 @@ const todo = new Vue({
       if (this.sidebar) this.sidebar = false;
     },
 
-    getListLS() {
-
+    setView(key) {
+      this.view = key;
     },
 
     addTask(formData) {
@@ -123,6 +126,10 @@ const todo = new Vue({
       } else {
         this.formError = 'Please select a date in the future.';
       }
+    },
+
+    editTask() {
+
     },
 
     completeTask(task) {
@@ -152,8 +159,6 @@ const todo = new Vue({
       ajax(`${config.API_URL}/task`, 'GET')
         .then((res) => {
           this.taskList = res.parsed.data;
-          // this.taskList.forEach((item) => {
-          // });
           this.loaded = true;
           console.log('GOT LIST');
           this.database = true;
@@ -185,10 +190,6 @@ const todo = new Vue({
 
     toggleSidebar() {
       this.sidebar = !this.sidebar;
-    },
-
-    toggleState() {
-      this.state = this.state === 'split' ? 'full' : 'split';
     },
 
     getTasks(obj) {

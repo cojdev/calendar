@@ -1,26 +1,8 @@
 .modal {
   @include modal;
-  padding: 1rem;
+  padding: 2rem;
   width: 700px;
   max-width: 90%;
-
-  p {
-    color: #888;
-    font-size: 1rem;
-  }
-
-  ul {
-    text-align: left;
-    padding: 0;
-    margin: 0;
-    list-style: none;
-  }
-
-  li {
-    line-height: 1.5rem;
-    padding: .25rem;
-    border-bottom: 1px solid $line-colour;
-  }
 
   &__overlay {
     @include overlay;

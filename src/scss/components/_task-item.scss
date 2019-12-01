@@ -1,0 +1,46 @@
+.task-item {
+  line-height: 1.5rem;
+  padding: 1rem 0;
+  
+  &:not(:last-child) {
+    border-bottom: 1px solid #eee;
+  }
+
+  &__label {
+    position: relative;
+    transition: 250ms ease;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: 300;
+    &--strike {
+      color: #aaa;
+    }
+  }
+  
+  &__strike {
+    position: absolute;
+    top: calc(50% - 1px);
+    left: 2rem;
+    right: 0;
+    height: 2px;
+    background-color: $primary;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: 250ms ease;
+  
+    &--show {
+        transform: none;
+    }
+  }
+  
+  &__toolbar {
+    font-size: .7rem;
+    color: #888;
+    font-weight: 500;
+    padding-left: 2rem;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  &__controls {}
+}

@@ -1,34 +1,37 @@
 import Vue from 'vue';
-import { formatDate } from '../helpers';
+import { formatDate, parseDate } from '../helpers';
 
 Vue.component('task-list', {
-  props: ['isPast', 'list', 'selected', 'removeTask'],
+  props: ['isPast', 'list', 'selected', 'removeTask', 'completeTask', 'editTask'],
 
   methods: {
     formatDate(obj) {
       return formatDate(obj);
     },
+
+    parseDate(obj) {
+      return parseDate(obj);
+    },
   },
 
   template: `
     <div class="task-list">
-      <div class="todo-date">{{ formatDate(selected) }}</div>
-      <input type="text" placeholder="Add a new task" v-if="!isPast(selected)" @keyup.enter="$emit('add-task')">
-      <button class="submit-button" @click="$emit('add-task')" v-if="!isPast(selected)">Add task</button>
-
+      <div class="todo-date">Welcome back, {{ formatDate(selected) }}</div>
+      <select></select>
+      <button>Add task</button>
       <template v-if="list.length">
-        <ul>
-          <li v-for="task in list">
-            <input type="checkbox" :checked="task.completed !== null" @input="completeTask(task)">
-            <span :class="{'task-checked': task.completed !== null, 'task-starred': task.starred === '1'}">{{ task.description }} ({{ task.starred }})</span>
-            <div class="task-buttons">
-              <button class="delete-button" @click="removeTask(task)"><i class="fa fa-times"
-                  aria-hidden="true"></i></button>
-            </div>
-          </li>
+        <ul class="task-list__list">
+          <!-- Task Item -->
+          <task-item
+            v-for="task in list"
+            :key="task.id"
+            :task="task"
+            :removeTask="removeTask"
+            :completeTask="completeTask"
+            :editTask="editTask"
+            ></task-item>
         </ul>
       </template>
-      
       <template v-else>
         <p>You have no tasks</p>
       </template>
