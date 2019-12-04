@@ -53,7 +53,6 @@ Vue.component('task-form', {
       <div
         v-if="formError !== ''"
         class="error">{{formError}}</div>
-    </div>
   </form>
   `,
 });
