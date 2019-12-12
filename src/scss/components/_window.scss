@@ -1,0 +1,10 @@
+.window {
+  overflow: hidden;
+  height: 100vh;
+  width: calc(100% - #{$sidebar-width});
+
+  @media screen and (max-width: $break) {
+    width: 100%;
+    overflow-y: auto;
+  }
+}

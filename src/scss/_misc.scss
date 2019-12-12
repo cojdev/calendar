@@ -1,0 +1,53 @@
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  @media screen and (max-width: $sm) {
+    display: block;
+  }
+}
+
+.col {
+  width: 47.5%;
+}
+
+.checkbox {
+  @include checkbox;
+}
+
+.edit-button,
+.delete-button {
+  @include button;
+
+  $size: 1.5rem;
+
+  color: #888;
+  height: $size;
+}
+
+.mobile-only {
+  @media screen and (min-width: $br-sidebar) {
+    display: none !important;
+  }
+}
+
+
+.loader {
+  display: flex;
+  background: #fff;
+  height: 100vh;
+  width: 100%;
+
+  &::after {
+    margin: auto;
+    content: "";
+    display: block;
+    height: 80px;
+    width: 80px;
+    border: 10px solid #eee;
+    border-left-color: $primary;
+    border-radius: 50%;
+    animation: spin linear infinite 600ms;
+  }
+}

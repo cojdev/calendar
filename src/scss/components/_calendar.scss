@@ -25,33 +25,6 @@
   }
 }
 
-.arrow-button {
-  @include button;
-
-  position: absolute;
-  top: .5rem;
-  color: #fff;
-  width: 2rem;
-  height: 2rem;
-  border-radius: $border-radius;
-
-  &:first-of-type {
-    left: .5rem;
-  }
-
-  &:nth-of-type(2) {
-    left: 3rem;
-  }
-
-  &:nth-of-type(3) {
-    right: 3rem;
-  }
-
-  &:last-of-type {
-    right: .5rem;
-  }
-}
-
 .day-button {
   @include button;
   position: absolute;

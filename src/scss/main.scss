@@ -1,44 +1,23 @@
 @import 'vars';
-@import 'vue';
 @import 'mixins';
 @import 'base';
 @import 'animations';
 
+// vendor
+@import 'vue';
+
 // components
 @import 'components/calendar';
 @import 'components/calendar-head';
-@import 'components/calendar-table';
+@import 'components/calendar-body';
 @import 'components/modal';
 @import 'components/sidebar';
 @import 'components/task-form';
 @import 'components/task-list';
 @import 'components/task-item';
+@import 'components/window';
 
-.mobile-only {
-  @media screen and (min-width: $br-sidebar) {
-    display: none !important;
-  }
-}
-
-
-.loader {
-  display: flex;
-  background: #fff;
-  height: 100vh;
-  width: 100%;
-
-  &::after {
-    margin: auto;
-    content: "";
-    display: block;
-    height: 80px;
-    width: 80px;
-    border: 10px solid #eee;
-    border-left-color: $primary;
-    border-radius: 50%;
-    animation: spin linear infinite 600ms;
-  }
-}
+@import 'misc';
 
 .app {
   margin: 0;
@@ -53,33 +32,4 @@
   @media screen and (max-width: $sm) {
     display: block;
   }
-}
-
-.window {
-  overflow: hidden;
-  height: 100vh;
-  width: calc(100% - #{$sidebar-width});
-
-  @media screen and (max-width: $break) {
-    width: 100%;
-    overflow-y: auto;
-  }
-}
-
-.row {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-
-  @media screen and (max-width: $sm) {
-    display: block;
-  }
-}
-
-.col {
-  width: 47.5%;
-}
-
-.checkbox {
-  @include checkbox;
 }

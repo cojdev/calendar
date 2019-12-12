@@ -6,14 +6,15 @@
     <template v-if="list.length">
       <ul class="task-list__list">
         <!-- Task Item -->
-        <task-item
+        <TaskItem
           v-for="task in list"
           :key="task.id"
           :task="task"
           :removeTask="removeTask"
           :completeTask="completeTask"
           :editTask="editTask"
-        ></task-item>
+          :selected="selected"
+        />
       </ul>
     </template>
     <template v-else>
@@ -23,9 +24,14 @@
 </template>
 
 <script>
-import { formatDate, parseDate } from "../helpers";
+import TaskItem from "./TaskItem";
+import { formatDate, parseDate } from '../../helpers';
 
 export default {
+  components: {
+    TaskItem
+  },
+
   props: [
     "isPast",
     "list",

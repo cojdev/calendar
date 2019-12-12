@@ -1,7 +1,7 @@
 // vars
 $cell-size: calc(100%/7);
 
-.calendar-table {
+.calendar-body {
   width: 100%;
   height: calc(100vh - 3rem - #{$toolbar-height});
   overflow: auto;

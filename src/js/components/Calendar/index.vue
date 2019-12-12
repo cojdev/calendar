@@ -1,20 +1,60 @@
-import Vue from 'vue';
-import cal from '../../cal';
+<template>
+  <!-- Calendar -->
+  <div class="calendar calendar--full">
+    <!-- Calendar Head -->
+    <CalendarHead
+      :month="monthName"
+      :year="year"
+      @next-month="$emit('next-month')"
+      @next-year="$emit('next-year')"
+      @prev-month="$emit('prev-month')"
+      @prev-year="$emit('prev-year')"
+    />
 
-Vue.component('calendar', {
-  props: ['getTasks', 'isToday', 'isSelected', 'isState', 'selectDay', 'openTask', 'month', 'year'],
+    <!-- Calendar Table -->
+    <CalendarBody
+      :weeks="getWeeks"
+      :day-names="dayNames"
+      :is-today="isToday"
+      :is-selected="isSelected"
+      :select-day="selectDay"
+      @open-task="$emit('open-task')"
+    />
+  </div>
+</template>
+
+<script>
+import CalendarHead from "./CalendarHead";
+import CalendarBody from "./CalendarBody";
+
+export default {
+  components: {
+    CalendarHead,
+    CalendarBody
+  },
+
+  props: [
+    "getTasks",
+    "isToday",
+    "isSelected",
+    "isState",
+    "selectDay",
+    "openTask",
+    "month",
+    "year"
+  ],
 
   data() {
     return {
       monthName: cal.months[this.month],
-      dayNames: cal.days,
+      dayNames: cal.days
     };
   },
 
   watch: {
     month(val) {
       this.monthName = cal.months[val];
-    },
+    }
   },
 
   computed: {
@@ -22,7 +62,7 @@ Vue.component('calendar', {
      * @returns {[string, number]} 2d array of days and weeks in the current month
      */
     getWeeks() {
-      console.log('getweeks');
+      console.log("getweeks");
       const { year, month, getTasks } = this;
       const weeks = [];
 
@@ -43,12 +83,12 @@ Vue.component('calendar', {
           for (let j = 0; j < 7; j++) {
             if (j < firstWeekday) {
               // add an empty day to the start of the month
-              weeks[i].push('');
+              weeks[i].push("");
             } else {
               const elem = {
                 day: currentDay,
                 month,
-                year,
+                year
               };
               elem.tasks = getTasks(elem);
               weeks[i].push(elem);
@@ -62,46 +102,21 @@ Vue.component('calendar', {
               const elem = {
                 day: currentDay,
                 month,
-                year,
+                year
               };
               elem.tasks = getTasks(elem);
               weeks[i].push(elem);
               currentDay++;
             } else {
               // add an empty day to the end of the month
-              weeks[i].push('');
+              weeks[i].push("");
             }
           }
         }
       }
 
-      console.log(weeks);
       return weeks;
-    },
-  },
-
-  template: `
-  <!-- Calendar -->
-  <div class="calendar calendar--full">
-    <!-- Calendar Head -->
-    <calendar-head
-      :month="monthName"
-      :year="year"
-      @next-month="$emit('next-month')"
-      @next-year="$emit('next-year')"
-      @prev-month="$emit('prev-month')"
-      @prev-year="$emit('prev-year')"
-      ></calendar-head>
-
-    <!-- Calendar Table -->
-    <calendar-table
-      :weeks="getWeeks"
-      :day-names="dayNames"
-      :is-today="isToday"
-      :is-selected="isSelected"
-      :select-day="selectDay"
-      @open-task="$emit('open-task')"
-      ></calendar-table>
-  </div>
-  `,
-});
+    }
+  }
+};
+</script>
