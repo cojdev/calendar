@@ -2,6 +2,51 @@
 
 This is a fully responsive Calendar To-Do App that is supported on all modern browsers and IE10+. Tasks can be added to specific dates and can be deleted. Tasks cannot be added to past dates.
 
+## Setup
+
+### Frontend
+
+Install dependencies
+```sh
+npm i
+```
+
+Run frontend app
+```sh
+npm start
+```
+
+The app will be accessible at http://localhost:8080
+
+### Backend
+
+Initialise and update api submodule
+```sh
+git submodule init
+git submodule update
+```
+
+Start docker container
+```sh
+# enter api directory
+cd api
+# start docker container
+docker-compose up --build
+```
+
+#### Access docker database and install backend dependencies
+```sh
+# get container id
+docker ps
+# access container
+docker exec -it <container-id> /bin/bash
+# install dependencies
+cd /var/www/html
+composer install
+```
+
+The api will be accessible at http://localhost:4001
+
 ## Technologies Used
 
 * Vue – Front End Framework
@@ -29,26 +74,3 @@ There are 2 views, “Full” and “Split”. “Full” has the calendar filli
   "due": "due date"
 }
 ```
-
-### Setup
-
-```sh
-# enter api directory
-cd api
-# start docker container
-docker-compose up --build
-```
-
-#### Access docker database and install backend dependencies
-```sh
-# get container id
-docker ps
-# access container
-docker exec -it <container-id> /bin/bash
-# install dependencies
-cd /var/www/html
-composer install
-```
-
-The complete task list for all days can be saved to a MySQL database using the PHP PDO Class and prepared statement to prevent SQL injections. The Front End can communicate with the Back End using AJAX and dynamically generated JSON files.
-The SQL commands to create the necessary table are in “init.sql”.
