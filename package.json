@@ -10,8 +10,8 @@
     "wp-prod": "webpack --mode production --progress"
   },
   "keywords": [
-    "Calendar",
-    "Todo"
+    "calendar",
+    "todo"
   ],
   "author": "Charles Ojukwu",
   "license": "ISC",
